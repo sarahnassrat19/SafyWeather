@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settingsscreen.SettingsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_color"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/langSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Language"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        />
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_margin="10dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/arabicLang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Arabic"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/englishLang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" English"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/locationSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        />
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_margin="10dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/GPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" GPS"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Map"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tempratureSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Temprature"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        />
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_margin="10dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/celsiusUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Celsius"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/fahrenheitUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Fahrenheit"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+
+        <RadioButton
+            android:id="@+id/kelvinUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Kelvin"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/windSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wind Speed"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        />
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_margin="10dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/meterPerSec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Meter/Sec"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/milePerHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Mile/Hour"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/NotificationSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notifications"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners"
+        />
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_margin="10dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/notiEnable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Enable"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+        <RadioButton
+            android:id="@+id/notiDisable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Disable"
+            android:textSize="18dp"
+            android:textColor="@color/white"/>
+    </RadioGroup>
+
+    </LinearLayout>
+
+</ScrollView>

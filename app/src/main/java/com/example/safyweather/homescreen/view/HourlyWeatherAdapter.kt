@@ -1,4 +1,4 @@
-package com.example.safyweather.homescreen
+package com.example.safyweather.homescreen.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -22,13 +22,13 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): HourlyWeatherAdapter.HourlyWeatherViewHolder {
+    ): HourlyWeatherViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.hourly_item_layout,parent,false)
         return HourlyWeatherViewHolder(view)
     }
 
     override fun onBindViewHolder(
-        holder: HourlyWeatherAdapter.HourlyWeatherViewHolder,
+        holder: HourlyWeatherViewHolder,
         position: Int
     ) {
         /*val oneHourlyWeather:HourlyWeather = hourlyWeather[position]
