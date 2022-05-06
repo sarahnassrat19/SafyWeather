@@ -1,14 +1,12 @@
-package com.example.safyweather.homescreen
+package com.example.safyweather.homescreen.view
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.safyweather.R
 
 class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherViewHolder> {
@@ -24,13 +22,13 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): DailyWeatherAdapter.DailyWeatherViewHolder {
+    ): DailyWeatherViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.daily_item_layout,parent,false)
         return DailyWeatherViewHolder(view)
     }
 
     override fun onBindViewHolder(
-        holder: DailyWeatherAdapter.DailyWeatherViewHolder,
+        holder: DailyWeatherViewHolder,
         position: Int
     ) {
         /*val oneDailyWeather:DailyWeather = dailyWeather[position]
