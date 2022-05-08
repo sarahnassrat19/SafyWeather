@@ -9,6 +9,7 @@ interface API_Interface {
     @GET("onecall")
     suspend fun getTheWholeWeather(@Query("lat") lat:Double,
                                    @Query("lon") long:Double,
+                                   @Query("units") unit:String,
                                    @Query("exclude") exclude:String,
                                    @Query("appid")appid:String): Response<WeatherForecast>
 }

@@ -3,12 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/ic_menu.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/rounded_corners.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/activity_main.xml" value="0.2359375" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/daily_item_layout.xml" value="0.25" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_alerts.xml" value="0.25" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_favorite.xml" value="0.2359375" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_main_navigation.xml" value="0.25" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/header_layout.xml" value="0.25" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/hourly_item_layout.xml" value="0.264" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/initial_setup_dialog.xml" value="0.4" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/menu/menu_items.xml" value="0.25" />
       </map>
     </option>
   </component>

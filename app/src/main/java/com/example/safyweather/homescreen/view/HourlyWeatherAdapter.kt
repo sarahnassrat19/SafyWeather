@@ -7,16 +7,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.safyweather.Converters
 import com.example.safyweather.R
+import com.example.safyweather.model.HourlyWeather
 
 class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWeatherViewHolder>{
 
     private var context: Context
-    //private var hourlyWeather:List<HourlyWeather>
+    private var hourlyWeather:List<HourlyWeather>
+    var converter = Converters()
 
-    constructor(context: Context/*,hourlyWeather:List<HourlyWeather>*/){
+    constructor(context: Context,hourlyWeather:List<HourlyWeather>){
         this.context = context
-        //this.hourlyWeather = hourlyWeather
+        this.hourlyWeather = hourlyWeather
     }
 
     override fun onCreateViewHolder(
@@ -31,16 +35,22 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
         holder: HourlyWeatherViewHolder,
         position: Int
     ) {
-        /*val oneHourlyWeather:HourlyWeather = hourlyWeather[position]
-        holder.hourlyTime.text = oneHourlyWeather.time
-        holder.hourlyTemp.text = oneHourlyWeather.temp
-        holder.hourlyWindSpeed.text = oneHourlyWeather.windSpeed
-        holder.hourlyIcon.setImageResource(R.drawable.hourly_icon)*/
+        val oneHourlyWeather:HourlyWeather = hourlyWeather[position]
+        holder.hourlyTime.text = converter.getTimeFormat(oneHourlyWeather.dt)
+        holder.hourlyTemp.text = oneHourlyWeather.temp.toString()
+        holder.hourlyWindSpeed.text = oneHourlyWeather.wind_speed.toString()
+        Glide.with(context)
+            .load("https://openweathermap.org/img/wn/"+oneHourlyWeather.weather[0].icon+"@2x.png")
+            .into(holder.hourlyIcon)
+        //holder.hourlyIcon.setImageResource(R.drawable.hourly_icon)
     }
 
     override fun getItemCount(): Int {
-        //return hourlyWeather.size
-        return 0
+        return hourlyWeather.size
+    }
+
+    fun setHourlyWeatherList(hourlyWeatherList:List<HourlyWeather>){
+        this.hourlyWeather = hourlyWeatherList
     }
 
     inner class HourlyWeatherViewHolder(private val view: View):RecyclerView.ViewHolder(view){

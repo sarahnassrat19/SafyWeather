@@ -7,16 +7,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.safyweather.Converters
 import com.example.safyweather.R
+import com.example.safyweather.model.DailyWeather
 
 class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherViewHolder> {
 
     private var context: Context
-    //private var dailyWeather:List<DailyWeather>
+    private var dailyWeather:List<DailyWeather>
+    var converter = Converters()
 
-    constructor(context: Context/*,dailyWeather:List<DailyWeather>*/){
+    constructor(context: Context,dailyWeather:List<DailyWeather>){
         this.context = context
-        //this.dailyWeather = dailyWeather
+        this.dailyWeather = dailyWeather
     }
 
     override fun onCreateViewHolder(
@@ -31,16 +35,22 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
         holder: DailyWeatherViewHolder,
         position: Int
     ) {
-        /*val oneDailyWeather:DailyWeather = dailyWeather[position]
-        holder.dailyDate.text = oneDailyWeather.date
-        holder.dailyDesc.text = oneDailyWeather.desc
-        holder.dailyTemp.text = oneDailyWeather.temp
-        holder.dailyIcon.setImageResource(R.drawable.daily_icon)*/
+        val oneDailyWeather:DailyWeather = dailyWeather[position]
+        holder.dailyDate.text = converter.getDayFormat(oneDailyWeather.dt)
+        holder.dailyDesc.text = oneDailyWeather.weather[0].description
+        holder.dailyTemp.text = oneDailyWeather.temp.day.toString()
+        Glide.with(context)
+            .load("https://openweathermap.org/img/wn/"+oneDailyWeather.weather[0].icon+"@2x.png")
+            .into(holder.dailyIcon)
+        //holder.dailyIcon.setImageResource(R.drawable.daily_icon)
     }
 
     override fun getItemCount(): Int {
-        //return dailyWeather.size
-        return 0
+        return dailyWeather.size
+    }
+
+    fun setDailyWeatherList(dailyWeatherList:List<DailyWeather>){
+        this.dailyWeather = dailyWeatherList
     }
 
     inner class DailyWeatherViewHolder(private val view: View):RecyclerView.ViewHolder(view){

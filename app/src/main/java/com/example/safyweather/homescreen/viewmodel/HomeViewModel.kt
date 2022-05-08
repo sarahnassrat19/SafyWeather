@@ -15,11 +15,10 @@ class HomeViewModel(private val repo:RepositoryInterface):ViewModel() {
     private val _weatherFromNetwork = MutableLiveData<WeatherForecast>()
     val weatherFromNetwork:LiveData<WeatherForecast> = _weatherFromNetwork
 
-    fun getWholeWeather(){
+    fun getWholeWeather(lat:Double,long:Double,unit:String){
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getWholeWeather: in view model ")
-            val response = repo.getCurrentWeatherWithLocationInRepo()
-
+            val response = repo.getCurrentWeatherWithLocationInRepo(lat,long,unit)
             _weatherFromNetwork.postValue(response)
         }
     }
