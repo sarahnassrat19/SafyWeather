@@ -16,8 +16,8 @@ class Repository(var remoteSource: RemoteSourceInterface,
         }
     }
 
-    override suspend fun getCurrentWeatherWithLocationInRepo(): WeatherForecast {
+    override suspend fun getCurrentWeatherWithLocationInRepo(lat:Double,long:Double,unit:String): WeatherForecast {
         Log.i("TAG", "getCurrentWeatherWithLocationInRepoooooooooooooo: ")
-        return remoteSource.getCurrentWeatherWithLocation()
+        return remoteSource.getCurrentWeatherWithLocation(lat,long,unit)
     }
 }
