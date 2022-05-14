@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
-        appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment,R.id.favoriteFragment,R.id.settingsFragment,R.id.alertsFragment),navigationDrawer)
+        appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment,R.id.favoriteFragment,R.id.settingsFragment,R.id.alertsFragment,R.id.action_favoriteFragment_to_favoriteDetailsFragment),navigationDrawer)
 
         setSupportActionBar(toolbar)
         setupActionBarWithNavController(navController,appBarConfig)

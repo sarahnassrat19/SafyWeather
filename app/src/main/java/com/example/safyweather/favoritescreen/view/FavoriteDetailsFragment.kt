@@ -1,4 +1,4 @@
-package com.example.safyweather.homescreen.view
+package com.example.safyweather.favoritescreen.view
 
 import android.content.Context
 import android.os.Bundle
@@ -15,35 +15,37 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
-import com.example.safyweather.utilities.Converters
 import com.example.safyweather.R
 import com.example.safyweather.db.LocalSource
+import com.example.safyweather.homescreen.view.DailyWeatherAdapter
+import com.example.safyweather.homescreen.view.HourlyWeatherAdapter
 import com.example.safyweather.homescreen.viewmodel.HomeViewModel
 import com.example.safyweather.homescreen.viewmodel.HomeViewModelFactory
 import com.example.safyweather.model.Repository
 import com.example.safyweather.networking.RemoteSource
+import com.example.safyweather.utilities.Converters
 
-class HomeFragment : Fragment() {
+class FavoriteDetailsFragment : Fragment() {
 
-    lateinit var city:TextView
-    lateinit var currDate:TextView
-    lateinit var currTime:TextView
-    lateinit var temp:TextView
-    lateinit var desc:TextView
-    lateinit var icon:ImageView
-    lateinit var animLoading: LottieAnimationView
+    lateinit var city: TextView
+    lateinit var currDate: TextView
+    lateinit var currTime: TextView
+    lateinit var temp: TextView
+    lateinit var desc: TextView
+    lateinit var icon: ImageView
+    //lateinit var animLoading: LottieAnimationView
 
-    lateinit var viewModelFactory:HomeViewModelFactory
-    lateinit var viewModel: HomeViewModel
+    lateinit var viewModelFactory: HomeViewModelFactory
+    lateinit var detailsViewModel: HomeViewModel
 
-    lateinit var hourlyRecycler:RecyclerView
-    lateinit var dailyRecycler:RecyclerView
-    lateinit var hourlyAdapter:HourlyWeatherAdapter
-    lateinit var dailyAdapter:DailyWeatherAdapter
-    lateinit var layoutManagerHourly:LinearLayoutManager
-    lateinit var layoutManagerDaily:LinearLayoutManager
+    lateinit var hourlyRecycler: RecyclerView
+    lateinit var dailyRecycler: RecyclerView
+    lateinit var hourlyAdapter: HourlyWeatherAdapter
+    lateinit var dailyAdapter: DailyWeatherAdapter
+    lateinit var layoutManagerHourly: LinearLayoutManager
+    lateinit var layoutManagerDaily: LinearLayoutManager
 
-    val locationArgs:HomeFragmentArgs by navArgs()
+    val weatherToShow:FavoriteDetailsFragmentArgs by navArgs()
 
     var converter = Converters()
 
@@ -56,7 +58,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_favorite_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +69,7 @@ class HomeFragment : Fragment() {
                 RemoteSource.getInstance(),
                 LocalSource.getInstance(requireActivity()),
                 requireContext()))
-        viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
+        detailsViewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
 
         city = view.findViewById(R.id.currCity)
         currDate = view.findViewById(R.id.currDate)
@@ -77,7 +79,7 @@ class HomeFragment : Fragment() {
         icon = view.findViewById(R.id.currIcon)
         hourlyRecycler = view.findViewById(R.id.hourlyRecycler)
         dailyRecycler = view.findViewById(R.id.dailyRecycler)
-        animLoading = view.findViewById(R.id.animationView)
+        //animLoading = view.findViewById(R.id.animationView)
 
         hourlyAdapter = HourlyWeatherAdapter(context as Context, arrayListOf())
         dailyAdapter = DailyWeatherAdapter(context as Context, arrayListOf())
@@ -88,30 +90,30 @@ class HomeFragment : Fragment() {
         hourlyRecycler.layoutManager = layoutManagerHourly
         dailyRecycler.layoutManager = layoutManagerDaily
 
-        //viewModel.getWholeWeather(27.1783 , 31.1859,"metric" )
-        viewModel.getWholeWeather(
-            locationArgs.lat.toDouble(),
-            locationArgs.long.toDouble(),
-            locationArgs.unit)
+        city.text = weatherToShow.weather.timezone
+        currDate.text = converter.getDateFormat(weatherToShow.weather.current.dt)
+        currTime.text = converter.getTimeFormat(weatherToShow.weather.current.dt)
+        temp.text = weatherToShow.weather.current.temp.toString()
+        desc.text = weatherToShow.weather.current.weather[0].description
+        Glide.with(context as Context)
+            .load("https://openweathermap.org/img/wn/"+weatherToShow.weather.current.weather[0].icon+"@2x.png")
+            .into(icon)
+        hourlyAdapter.setHourlyWeatherList(weatherToShow.weather.hourly)
+        dailyAdapter.setDailyWeatherList(weatherToShow.weather.daily)
 
-        viewModel.weatherFromNetwork.observe(viewLifecycleOwner){
-            Log.i("TAG", "onViewCreated: on observvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvve")
-            if(it!=null){
-                animLoading.visibility = View.GONE
-                city.text = it.timezone
-                currDate.text = converter.getDateFormat(it.current.dt)
-                currTime.text = converter.getTimeFormat(it.current.dt)
-                temp.text = it.current.temp.toString()
-                desc.text = it.current.weather[0].description
-                Glide.with(context as Context)
-                    .load("https://openweathermap.org/img/wn/"+it.current.weather[0].icon+"@2x.png")
-                    .into(icon)
-                hourlyAdapter.setHourlyWeatherList(it.hourly)
-                dailyAdapter.setDailyWeatherList(it.daily)
-            }
-            hourlyAdapter.notifyDataSetChanged()
-            dailyAdapter.notifyDataSetChanged()
-        }
+        hourlyAdapter.notifyDataSetChanged()
+        dailyAdapter.notifyDataSetChanged()
+
+        //detailsViewModel.getWholeWeather( weatherToShow.weather.lat, weatherToShow.weather.lon, "metric")
+        //detailsViewModel.weatherFromNetwork.observe(viewLifecycleOwner){
+            //Log.i("TAG", "onViewCreated: on observvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvve")
+            //if(it!=null){
+                //animLoading.visibility = View.GONE
+
+            //}
+
+        //}
 
     }
+
 }
