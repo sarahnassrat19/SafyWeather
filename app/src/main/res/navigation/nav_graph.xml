@@ -3,13 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/initialFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.safyweather.homescreen.view.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="lat"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="long"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="unit"
+            app:argType="string"
+            android:defaultValue="standard" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.safyweather.settingsscreen.SettingsFragment"
@@ -17,12 +30,58 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.safyweather.favoritescreen.FavoriteFragment"
+        android:name="com.example.safyweather.favoritescreen.view.FavoriteFragment"
         android:label="Favorites"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_favoriteDetailsFragment"
+            app:destination="@id/favoriteDetailsFragment" />
+        <argument
+            android:name="lat"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="long"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="address"
+            app:argType="string"
+            android:defaultValue='"Assiut(default)"' />
+    </fragment>
     <fragment
         android:id="@+id/alertsFragment"
         android:name="com.example.safyweather.alertscreen.AlertsFragment"
         android:label="Alerts"
         tools:layout="@layout/fragment_alerts" />
+    <fragment
+        android:id="@+id/initialFragment"
+        android:name="com.example.safyweather.location.InitialFragment"
+        android:label="fragment_initial"
+        tools:layout="@layout/fragment_initial" >
+        <action
+            android:id="@+id/action_initialFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.safyweather.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteDetailsFragment"
+        android:name="com.example.safyweather.favoritescreen.view.FavoriteDetailsFragment"
+        android:label="fragment_favorite_details"
+        tools:layout="@layout/fragment_favorite_details" >
+        <argument
+            android:name="weather"
+            app:argType="com.example.safyweather.model.WeatherForecast" />
+    </fragment>
 </navigation>

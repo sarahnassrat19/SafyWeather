@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.safyweather.Converters
+import com.example.safyweather.utilities.Converters
 import com.example.safyweather.R
 import com.example.safyweather.model.HourlyWeather
 

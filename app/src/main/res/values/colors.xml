@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#06113C</color>
+    <color name="mySecondaryColor">#627ae0</color>
+    <color name="transparencyColor">#1d2956</color>
 </resources>

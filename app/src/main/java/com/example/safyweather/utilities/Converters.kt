@@ -1,4 +1,4 @@
-package com.example.safyweather
+package com.example.safyweather.utilities
 
 import java.text.SimpleDateFormat
 import java.util.*
