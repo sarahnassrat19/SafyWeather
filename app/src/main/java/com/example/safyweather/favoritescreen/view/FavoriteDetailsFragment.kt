@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import com.example.safyweather.MY_SHARED_PREFERENCES
 import com.example.safyweather.R
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.homescreen.view.DailyWeatherAdapter
@@ -68,7 +69,8 @@ class FavoriteDetailsFragment : Fragment() {
             Repository.getInstance(
                 RemoteSource.getInstance(),
                 LocalSource.getInstance(requireActivity()),
-                requireContext()))
+                requireContext(),
+                requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         detailsViewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
 
         city = view.findViewById(R.id.currCity)

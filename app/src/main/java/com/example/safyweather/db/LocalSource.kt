@@ -38,6 +38,10 @@ class LocalSource(context: Context):LocalSourceInterface {
         addressDao.deleteFavoriteAddress(address)
     }
 
+    override fun getAllStoredWeathers(): LiveData<List<WeatherForecast>> {
+        return weatherDao.getAllWeathers()
+    }
+
     override fun getWeatherWithLatLong(lat: Double, long: Double): LiveData<WeatherForecast> {
         return weatherDao.getWeatherWithLatLong(lat,long)
     }

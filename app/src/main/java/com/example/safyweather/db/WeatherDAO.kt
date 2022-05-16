@@ -10,6 +10,8 @@ import com.example.safyweather.model.WeatherForecast
 
 @Dao
 interface WeatherDAO {
+    @Query("SELECT * FROM weathers")
+    fun getAllWeathers():LiveData<List<WeatherForecast>>
 
     @Insert(onConflict = REPLACE)
     fun insertWeather(weather:WeatherForecast)

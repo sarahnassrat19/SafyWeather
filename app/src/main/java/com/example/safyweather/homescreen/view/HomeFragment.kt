@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import com.example.safyweather.MY_SHARED_PREFERENCES
 import com.example.safyweather.utilities.Converters
 import com.example.safyweather.R
+import com.example.safyweather.databinding.FragmentHomeBinding
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.homescreen.viewmodel.HomeViewModel
 import com.example.safyweather.homescreen.viewmodel.HomeViewModelFactory
@@ -25,7 +27,7 @@ import com.example.safyweather.networking.RemoteSource
 
 class HomeFragment : Fragment() {
 
-    lateinit var city:TextView
+    //lateinit var city:TextView
     lateinit var currDate:TextView
     lateinit var currTime:TextView
     lateinit var temp:TextView
@@ -43,6 +45,7 @@ class HomeFragment : Fragment() {
     lateinit var layoutManagerHourly:LinearLayoutManager
     lateinit var layoutManagerDaily:LinearLayoutManager
 
+    lateinit var binding: FragmentHomeBinding
     val locationArgs:HomeFragmentArgs by navArgs()
 
     var converter = Converters()
@@ -61,15 +64,17 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentHomeBinding.bind(view)
 
         viewModelFactory = HomeViewModelFactory(
             Repository.getInstance(
                 RemoteSource.getInstance(),
                 LocalSource.getInstance(requireActivity()),
-                requireContext()))
+                requireContext(),
+                requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
 
-        city = view.findViewById(R.id.currCity)
+        //city = binding.currCity
         currDate = view.findViewById(R.id.currDate)
         currTime = view.findViewById(R.id.currTime)
         temp = view.findViewById(R.id.currTemp)
@@ -98,7 +103,7 @@ class HomeFragment : Fragment() {
             Log.i("TAG", "onViewCreated: on observvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvve")
             if(it!=null){
                 animLoading.visibility = View.GONE
-                city.text = it.timezone
+                binding.currCity.text = it.timezone
                 currDate.text = converter.getDateFormat(it.current.dt)
                 currTime.text = converter.getTimeFormat(it.current.dt)
                 temp.text = it.current.temp.toString()

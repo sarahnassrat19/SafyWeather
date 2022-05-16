@@ -1,9 +1,11 @@
 package com.example.safyweather.model
 
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.room.Entity
 import androidx.room.TypeConverter
 import com.example.safyweather.utilities.WeatherConverter
+import org.intellij.lang.annotations.Language
 import java.io.Serializable
 import java.sql.Timestamp
 
@@ -15,7 +17,8 @@ data class WeatherForecast(@NonNull
                            var timezone:String,
                            var current:CurrentWeather,
                            var hourly:List<HourlyWeather>,
-                           var daily:List<DailyWeather>): Serializable
+                           var daily:List<DailyWeather>,
+                           val alerts: List<Alert>?): Serializable
 
 data class CurrentWeather(var dt:Int,
                           var temp:Double,
@@ -46,9 +49,22 @@ data class Temprature(var day:Double,
                       var eve:Double,
                       var morn:Double)
 
+data class Alert (var senderName: String,
+                  var event: String,
+                  var start: Long,
+                  var end: Long,
+                  var description: String,
+                  var tags: List<String>)
+
+data class Settings(var language:Boolean,
+                    var unit:Int,
+                    var location:Int,
+                    var notification:Boolean)
+
 @Entity(primaryKeys = arrayOf("lat", "lon"), tableName = "addresses")
 data class WeatherAddress(var address:String,
                           @NonNull
                           var lat:Double,
                           @NonNull
                           var lon:Double)
+

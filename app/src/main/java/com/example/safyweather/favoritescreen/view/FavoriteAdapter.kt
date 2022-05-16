@@ -17,19 +17,23 @@ import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModel
 import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModelFactory
 import com.example.safyweather.model.Repository
 import com.example.safyweather.model.WeatherAddress
+import com.example.safyweather.model.WeatherForecast
 import com.example.safyweather.networking.RemoteSource
 
 class FavoriteAdapter: RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> {
 
     private var context: Context
     private var favAddresses:List<WeatherAddress>
+    private var favWeatherList:List<WeatherForecast>
     private var onClickHandler:OnFavWeatherClickListener
 
     constructor(context: Context,
                 favAddresses:List<WeatherAddress>,
+                favWeatherList:List<WeatherForecast>,
                 onClickHandler:OnFavWeatherClickListener){
         this.context = context
         this.favAddresses = favAddresses
+        this.favWeatherList = favWeatherList
         this.onClickHandler = onClickHandler
     }
 
@@ -43,7 +47,7 @@ class FavoriteAdapter: RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> 
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         holder.addressName.text = favAddresses[position].address
-        holder.removeFav.setOnClickListener{ onClickHandler.onRemoveBtnClick(favAddresses[position]) }
+        holder.removeFav.setOnClickListener{ onClickHandler.onRemoveBtnClick(favAddresses[position],favWeatherList[position]) }
         holder.favConstraint.setOnClickListener { onClickHandler.onFavItemClick(favAddresses[position])}
     }
 
@@ -53,6 +57,10 @@ class FavoriteAdapter: RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> 
 
     fun setFavAddressesList(addressList:List<WeatherAddress>){
         this.favAddresses = addressList
+    }
+
+    fun setFavWeatherList(weatherList:List<WeatherForecast>){
+        this.favWeatherList = weatherList
     }
 
     inner class FavoriteViewHolder(private val view: View):RecyclerView.ViewHolder(view) {
