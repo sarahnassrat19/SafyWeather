@@ -14,6 +14,8 @@ interface LocalSourceInterface {
     fun deleteFavoriteAddress(address: WeatherAddress)
 
     //weather funs
+    fun getAllStoredWeathers():LiveData<List<WeatherForecast>>
+
     fun getWeatherWithLatLong(lat:Double,long:Double):LiveData<WeatherForecast>
 
     fun insertWeather(weather: WeatherForecast)

@@ -27,6 +27,10 @@ class FavoriteViewModel(private val repo: RepositoryInterface): ViewModel() {
         return repo.storedAddresses
     }
 
+    fun getAllWeathersInVM():LiveData<List<WeatherForecast>>{
+        return repo.getAllWeathersInRepo()
+    }
+
     fun addAddressToFavorites(address: WeatherAddress){
         viewModelScope.launch(Dispatchers.IO){
             repo.insertFavoriteAddress(address)
@@ -56,12 +60,6 @@ class FavoriteViewModel(private val repo: RepositoryInterface): ViewModel() {
         }
     }
 
-    /*private var _selectedWeatherToRemove = MutableLiveData<WeatherForecast>()
-    private var selectedWeatherToRemove : LiveData<WeatherForecast> = _selectedWeatherToRemove*/
-    fun removeBothAddressAndWeather(address:WeatherAddress,weather: WeatherForecast){
-        removeAddressFromFavorites(address)
-        removeOneFavWeather(weather)
-    }
 
     fun updateWeatherDatabase(owner: LifecycleOwner){
         getAllAddresses().observe(owner){

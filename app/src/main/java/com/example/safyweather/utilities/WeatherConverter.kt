@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.example.safyweather.model.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
 
 class WeatherConverter {
     var gson = Gson()
@@ -89,6 +90,58 @@ class WeatherConverter {
     @TypeConverter
     fun stringToTemprature(tempratureString:String):Temprature{
         return gson.fromJson(tempratureString,Temprature::class.java)
+    }
+
+    //alert list
+    /*@TypeConverter
+    fun alertListToString(allAlerts:List<Alert>):String{
+        return gson.toJson(allAlerts)
+    }
+
+    @TypeConverter
+    fun stringToAlertsList(allAlertString:String):List<Alert>{
+        var list = object :TypeToken<List<Alert>>(){}.type
+        return gson.fromJson(allAlertString,list)
+    }
+
+    //alert
+    @TypeConverter
+    fun alertToString(oneAlert:Alert):String{
+        return gson.toJson(oneAlert)
+    }
+
+    @TypeConverter
+    fun stringToAlert(oneAlertString:String):Alert{
+        var list = object :TypeToken<Alert>(){}.type
+        return gson.fromJson(oneAlertString,list)
+    }*/
+
+    //tag
+    @TypeConverter
+    fun tagToString(oneTag:List<String>):String{
+        return gson.toJson(oneTag)
+    }
+
+    @TypeConverter
+    fun stringToTags(oneTagString:String):List<String>{
+        var list = object :TypeToken<List<String>>(){}.type
+        return gson.fromJson(oneTagString,list)
+    }
+
+    //covert from / to alerts
+    @TypeConverter
+    fun fromAlertToString(alertList: List<Alert>?) : String{
+        return gson.toJson(alertList)
+    }
+
+    @TypeConverter
+    fun fromStringToAlert(alertListString: String) : List<Alert>?{
+        if(alertListString == null){
+            return Collections.emptyList()
+        }else{
+            var list = object : TypeToken<List<Alert?>?>(){}.type
+            return gson.fromJson(alertListString, list)
+        }
     }
 
 }

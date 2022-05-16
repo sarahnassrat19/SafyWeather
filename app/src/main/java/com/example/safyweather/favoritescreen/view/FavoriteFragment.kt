@@ -1,6 +1,7 @@
 package com.example.safyweather.favoritescreen.view
 
 import android.app.Service
+import android.content.Context.MODE_PRIVATE
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.safyweather.MY_SHARED_PREFERENCES
 import com.example.safyweather.R
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModel
@@ -34,7 +36,6 @@ class FavoriteFragment : Fragment() ,OnFavWeatherClickListener{
     private lateinit var btnAddToFav:FloatingActionButton
     private lateinit var navController: NavController
     //private val locationArgs: FavoriteFragmentArgs by navArgs()
-    //private lateinit var inCommingLocation:WeatherAddress
     private lateinit var favRecycler:RecyclerView
     private lateinit var favAdapter: FavoriteAdapter
     private lateinit var layoutManager:LinearLayoutManager
@@ -60,23 +61,23 @@ class FavoriteFragment : Fragment() ,OnFavWeatherClickListener{
         favViewModelFactory = FavoriteViewModelFactory(Repository.getInstance(
             RemoteSource.getInstance(),
             LocalSource.getInstance(requireActivity()),
-            requireContext()))
+            requireContext(),
+            requireContext().getSharedPreferences(MY_SHARED_PREFERENCES,MODE_PRIVATE)))
+
         favViewModel = ViewModelProvider(this,favViewModelFactory).get(FavoriteViewModel::class.java)
 
         navController = Navigation.findNavController(activity as AppCompatActivity,R.id.nav_host_fragment)
         btnAddToFav = view.findViewById(R.id.floatingAddFav)
         favRecycler = view.findViewById(R.id.favoriteRecycler)
-        favAdapter = FavoriteAdapter(requireContext(), emptyList(),this)
+        favAdapter = FavoriteAdapter(requireContext(), emptyList(),emptyList(),this)
         layoutManager = LinearLayoutManager(requireContext())
         favRecycler.adapter = favAdapter
         favRecycler.layoutManager = layoutManager
 
-        /*if(locationArgs.address!="Assiut(default)"){
-            inCommingLocation.address = locationArgs.address
-            inCommingLocation.lat = locationArgs.lat.toDouble()
-            inCommingLocation.lon = locationArgs.long.toDouble()
-        }*/
-        connectivity = context?.getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        favViewModel.updateWeatherDatabase(this)
+
+        /*connectivity = context?.getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if ( connectivity != null)
         {
@@ -85,15 +86,23 @@ class FavoriteFragment : Fragment() ,OnFavWeatherClickListener{
             {
                 if (info!!.state == NetworkInfo.State.CONNECTED)
                 {
-                    favViewModel.updateWeatherDatabase(this)
+
                 }
             }
-        }
+        }*/
 
         favViewModel.getAllAddresses().observe(this){
             Log.i("TAG", "favoriteFragment on observvvvvvvvvvvvvvvvvve on get all addresses")
             if(it != null){
                 favAdapter.setFavAddressesList(it)
+            }
+            favAdapter.notifyDataSetChanged()
+        }
+
+        favViewModel.getAllWeathersInVM().observe(this){
+            Log.i("TAG", "fav fragment : in getAllWeathersInVvvvvvvvvvMmmmmmmmmmm")
+            if(it != null) {
+                favAdapter.setFavWeatherList(it)
             }
             favAdapter.notifyDataSetChanged()
         }
@@ -112,18 +121,17 @@ class FavoriteFragment : Fragment() ,OnFavWeatherClickListener{
         }
     }
 
-    override fun onRemoveBtnClick(address: WeatherAddress) {
-        favViewModel.getOneWeather(address.lat,address.lon).observe(this) {
-            if(it==null){
-                Log.i("TAG", "nnnnnnnnnnuuuuuuuuullllllllllllllllllllll")
-            }
-            favViewModel.removeBothAddressAndWeather(address,it)
-        }
+    override fun onRemoveBtnClick(address: WeatherAddress,weather:WeatherForecast) {
+        Log.i("TAG", "onRemoveBtnClick: adddddddddddddddrrrrrreeeeeessssssssssssss")
+        favViewModel.removeAddressFromFavorites(address)
+        Log.i("TAG", "onRemoveBtnClick: wwwwwwwwwwwwwwweeeeeeeeeeeeettttthhhhhheeeeeeeeeerrrrrrrrrrr ${favAdapter.itemCount}")
+        favViewModel.removeOneFavWeather(weather)
+
     }
 
     override fun onFavItemClick(address: WeatherAddress) {
         favViewModel.getOneWeather(address.lat,address.lon).observe(this) {
-            if(it==null){
+            if(it == null){
                 Log.i("TAG", "nnnnnnnnnnuuuuuuuuullllllllllllllllllllll222222222222222222222")
             }
             val action = FavoriteFragmentDirections.actionFavoriteFragmentToFavoriteDetailsFragment(it)

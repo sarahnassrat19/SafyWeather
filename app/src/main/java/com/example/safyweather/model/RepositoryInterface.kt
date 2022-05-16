@@ -8,6 +8,7 @@ interface RepositoryInterface {
     val storedAddresses:LiveData<List<WeatherAddress>>
 
     //val oneStoredWeather:LiveData<WeatherForecast>
+    fun getAllWeathersInRepo():LiveData<List<WeatherForecast>>
 
     fun getOneWeather(lat:Double,long:Double):LiveData<WeatherForecast>
 
@@ -21,5 +22,9 @@ interface RepositoryInterface {
 
     //fun updateWeatherDatabase()
 
+    fun addSettingsToSharedPreferences(settings:Settings)
+    fun getSettingsSharedPreferences():Settings
 
+    fun addWeatherToSharedPreferences(weather: WeatherForecast)
+    fun getWeatherSharedPreferences(): WeatherForecast
 }

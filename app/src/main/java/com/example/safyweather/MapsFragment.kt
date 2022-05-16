@@ -86,7 +86,8 @@ class MapsFragment : Fragment() {
             Repository.getInstance(
             RemoteSource.getInstance(),
             LocalSource.getInstance(requireActivity()),
-            requireContext()))
+            requireContext(),
+            requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         favViewModel = ViewModelProvider(this,favViewModelFactory).get(FavoriteViewModel::class.java)
 
         mapFragment?.getMapAsync(callback)
