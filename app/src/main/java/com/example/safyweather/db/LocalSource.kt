@@ -2,6 +2,7 @@ package com.example.safyweather.db
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.example.safyweather.model.AlertData
 import com.example.safyweather.model.WeatherAddress
 import com.example.safyweather.model.WeatherForecast
 
@@ -9,11 +10,13 @@ class LocalSource(context: Context):LocalSourceInterface {
 
     private var addressDao:FavoriteAddressDAO
     private var weatherDao:WeatherDAO
+    private var alertsDao:AlertsDAO
 
     init {
         val db = WeatherDatabase.getInstance(context.applicationContext)
         addressDao = db.addressesDao()
         weatherDao = db.weatherDao()
+        alertsDao = db.alertsDao()
     }
 
     companion object{
@@ -52,5 +55,17 @@ class LocalSource(context: Context):LocalSourceInterface {
 
     override fun deleteWeather(weather: WeatherForecast) {
         weatherDao.deleteWeather(weather)
+    }
+
+    override fun getAllStoredAlerts(): LiveData<List<AlertData>> {
+        return alertsDao.getAllStoredAlerts()
+    }
+
+    override fun insertAlert(alert: AlertData) {
+        alertsDao.insertAlert(alert)
+    }
+
+    override fun deleteAlert(alert: AlertData) {
+        alertsDao.deleteAlert(alert)
     }
 }

@@ -36,7 +36,7 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
         position: Int
     ) {
         val oneHourlyWeather:HourlyWeather = hourlyWeather[position]
-        holder.hourlyTime.text = converter.getTimeFormat(oneHourlyWeather.dt)
+        holder.hourlyTime.text = Converters.getTimeFormat(oneHourlyWeather.dt)
         holder.hourlyTemp.text = oneHourlyWeather.temp.toString()
         holder.hourlyWindSpeed.text = oneHourlyWeather.wind_speed.toString()
         Glide.with(context)
