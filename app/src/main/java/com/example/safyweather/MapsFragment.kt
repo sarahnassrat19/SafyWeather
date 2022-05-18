@@ -10,10 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.navigateUp
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModel
@@ -33,9 +36,10 @@ import java.util.*
 
 class MapsFragment : Fragment() {
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
     private lateinit var favViewModelFactory:FavoriteViewModelFactory
     private lateinit var favViewModel:FavoriteViewModel
+    private val fragmentType:MapsFragmentArgs by navArgs()
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -59,20 +63,35 @@ class MapsFragment : Fragment() {
             googleMap.addMarker(MarkerOptions().position(someLocation).title(addressName))
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(someLocation,8f))
 
-            val latIn4Digits:Double = String.format("%.4f", it.latitude).toDouble()
-            val lonIn4Digits:Double = String.format("%.4f", it.longitude).toDouble()
-            var selectedAddress = WeatherAddress(addressName,latIn4Digits,lonIn4Digits)
-            this.addWeatherWithAddress(selectedAddress)
-            //val action = MapsFragmentDirections.actionMapsFragmentToFavoriteFragment( it.latitude.toFloat(),it.longitude.toFloat(),addressName)
-            navController.navigateUp()
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage("Are you sure to save this location ?")
+                .setCancelable(false)
+                .setPositiveButton("save") { dialog, id ->
+                    when(fragmentType.commingFragment) {
+                        false -> {
+                            val latIn4Digits: Double = String.format("%.4f", it.latitude).toDouble()
+                            val lonIn4Digits: Double = String.format("%.4f", it.longitude).toDouble()
+                            var selectedAddress = WeatherAddress(addressName, latIn4Digits, lonIn4Digits)
+                            this.addWeatherWithAddress(selectedAddress)
+                            //val action = MapsFragmentDirections.actionMapsFragmentToFavoriteFragment( it.latitude.toFloat(),it.longitude.toFloat(),addressName)
+                            navController.navigateUp()
+                        }
+                        true -> {
+                            val action = MapsFragmentDirections.actionMapsFragmentToHomeFragment(it.latitude.toFloat(),it.longitude.toFloat(),"metric")
+                            navController.navigate(action)
+                        }
+                        null -> {
+                            Toast.makeText(requireContext(), "choose clear location!", Toast.LENGTH_SHORT).show()}
+                    }
+                    dialog.cancel()
+                }
+                .setNegativeButton("Cancel") { dialog, id -> dialog.cancel() }
+            val alert = dialogBuilder.create()
+            alert.show()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 

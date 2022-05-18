@@ -1,6 +1,7 @@
 package com.example.safyweather.db
 
 import androidx.lifecycle.LiveData
+import com.example.safyweather.model.AlertData
 import com.example.safyweather.model.WeatherAddress
 import com.example.safyweather.model.WeatherForecast
 
@@ -21,4 +22,11 @@ interface LocalSourceInterface {
     fun insertWeather(weather: WeatherForecast)
 
     fun deleteWeather(weather: WeatherForecast)
+
+    //alerts funs
+    fun getAllStoredAlerts():LiveData<List<AlertData>>
+
+    fun insertAlert(alert:AlertData)
+
+    fun deleteAlert(alert:AlertData)
 }

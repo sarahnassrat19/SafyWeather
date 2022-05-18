@@ -144,4 +144,36 @@ class WeatherConverter {
         }
     }
 
+    @TypeConverter
+    fun fromAlertDataToString(alertList: List<AlertData>) : String{
+        return gson.toJson(alertList)
+    }
+
+    @TypeConverter
+    fun fromStringToAlertData(alertListString: String) : List<AlertData> {
+        var list = object : TypeToken<List<AlertData>>(){}.type
+        return gson.fromJson(alertListString, list)
+    }
+
+    @TypeConverter
+    fun fromOneAlertDataToString(alert: AlertData) : String{
+        return gson.toJson(alert)
+    }
+
+    @TypeConverter
+    fun fromStringToOneAlertData(alertString: String) : AlertData {
+        var list = object : TypeToken<AlertData>(){}.type
+        return gson.fromJson(alertString, list)
+    }
+
+    @TypeConverter
+    fun fromDateToString(date:Date):String{
+        return gson.toJson(date)
+    }
+
+    @TypeConverter
+    fun fromStringToDate(dateString:String):Date{
+        var date = object : TypeToken<Date>(){}.type
+        return gson.fromJson(dateString,date)
+    }
 }

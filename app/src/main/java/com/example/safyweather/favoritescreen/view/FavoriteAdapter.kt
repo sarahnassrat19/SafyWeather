@@ -7,18 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.safyweather.R
-import com.example.safyweather.db.LocalSource
-import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModel
-import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModelFactory
-import com.example.safyweather.model.Repository
 import com.example.safyweather.model.WeatherAddress
 import com.example.safyweather.model.WeatherForecast
-import com.example.safyweather.networking.RemoteSource
 
 class FavoriteAdapter: RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> {
 

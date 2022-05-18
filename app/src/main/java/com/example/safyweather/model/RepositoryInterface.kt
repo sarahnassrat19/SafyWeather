@@ -26,5 +26,9 @@ interface RepositoryInterface {
     fun getSettingsSharedPreferences():Settings
 
     fun addWeatherToSharedPreferences(weather: WeatherForecast)
-    fun getWeatherSharedPreferences(): WeatherForecast
+    fun getWeatherSharedPreferences(): WeatherForecast?
+
+    fun getAllAlertsInRepo():LiveData<List<AlertData>>
+    fun insertAlertInRepo(alert: AlertData)
+    fun deleteAlertInRepo(alert: AlertData)
 }

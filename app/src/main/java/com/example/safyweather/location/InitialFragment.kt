@@ -2,6 +2,7 @@ package com.example.safyweather.location
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,6 +10,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -34,6 +37,8 @@ class InitialFragment : Fragment() {
     lateinit var fusedLocation: FusedLocationProviderClient
     lateinit var initialDialog:Dialog
     lateinit var navController:NavController
+    var connectivity : ConnectivityManager? = null
+    var info : NetworkInfo? = null
     val TAG="TAG"
 
     val locationCallBack = object : LocationCallback(){
@@ -52,10 +57,7 @@ class InitialFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_initial, container, false)
     }
@@ -71,14 +73,29 @@ class InitialFragment : Fragment() {
 
         var gpsLocation:RadioButton = initialDialog.findViewById(R.id.gpsLocation)
         var okBtn:Button = initialDialog.findViewById(R.id.initialSetupBtn)
-        initialDialog.show()
-        okBtn.setOnClickListener {
-            if(gpsLocation.isChecked) {
-                getFreshLocationRequest()
-                Log.i(TAG, "get location finnnnished")
-            }
-            else{
 
+        initialDialog.show()
+
+        okBtn.setOnClickListener {
+            connectivity = context?.getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+            if ( connectivity != null) {
+                info = connectivity!!.activeNetworkInfo
+                if (info != null) {
+                    if (info!!.state == NetworkInfo.State.CONNECTED) {
+                        if(gpsLocation.isChecked) {
+                            getFreshLocationRequest()
+                            Log.i(TAG, "get location finnnnished")
+                        }
+                        else{
+                            val action = InitialFragmentDirections.actionInitialFragmentToMapsFragment(true)
+                            navController.navigate(action)
+                        }
+                    }
+                    else{
+                        Toast.makeText(requireContext(), "check the network connection!", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
             initialDialog.dismiss()
         }
@@ -111,10 +128,7 @@ class InitialFragment : Fragment() {
             PERMISSION_ID)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         Log.i(TAG, "onRequestPermissionsResult: ")
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

@@ -3,11 +3,13 @@ package com.example.safyweather.model
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.example.safyweather.utilities.WeatherConverter
 import org.intellij.lang.annotations.Language
 import java.io.Serializable
 import java.sql.Timestamp
+import java.util.*
 
 @Entity(primaryKeys = arrayOf("lat", "lon"), tableName = "weathers")
 data class WeatherForecast(@NonNull
@@ -68,3 +70,9 @@ data class WeatherAddress(var address:String,
                           @NonNull
                           var lon:Double)
 
+@Entity(tableName = "alerts")
+data class AlertData(var fromDate:Date,
+                     var toDate:Date){
+    @PrimaryKey(autoGenerate = true)
+    var pKey:Int = 0
+}

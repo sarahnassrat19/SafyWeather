@@ -1,6 +1,9 @@
 package com.example.safyweather.homescreen.view
 
+import android.app.Service
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,33 +26,26 @@ import com.example.safyweather.databinding.FragmentHomeBinding
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.homescreen.viewmodel.HomeViewModel
 import com.example.safyweather.homescreen.viewmodel.HomeViewModelFactory
+import com.example.safyweather.location.InitialFragmentDirections
 import com.example.safyweather.model.Repository
+import com.example.safyweather.model.WeatherForecast
 import com.example.safyweather.networking.RemoteSource
 
 class HomeFragment : Fragment() {
 
-    //lateinit var city:TextView
-    lateinit var currDate:TextView
-    lateinit var currTime:TextView
-    lateinit var temp:TextView
-    lateinit var desc:TextView
-    lateinit var icon:ImageView
     lateinit var animLoading: LottieAnimationView
-
     lateinit var viewModelFactory:HomeViewModelFactory
     lateinit var viewModel: HomeViewModel
-
-    lateinit var hourlyRecycler:RecyclerView
-    lateinit var dailyRecycler:RecyclerView
     lateinit var hourlyAdapter:HourlyWeatherAdapter
     lateinit var dailyAdapter:DailyWeatherAdapter
     lateinit var layoutManagerHourly:LinearLayoutManager
     lateinit var layoutManagerDaily:LinearLayoutManager
-
     lateinit var binding: FragmentHomeBinding
     val locationArgs:HomeFragmentArgs by navArgs()
-
     var converter = Converters()
+
+    var connectivity : ConnectivityManager? = null
+    var info : NetworkInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,50 +70,81 @@ class HomeFragment : Fragment() {
                 requireContext(),
                 requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
-
-        //city = binding.currCity
-        currDate = view.findViewById(R.id.currDate)
-        currTime = view.findViewById(R.id.currTime)
-        temp = view.findViewById(R.id.currTemp)
-        desc = view.findViewById(R.id.currDesc)
-        icon = view.findViewById(R.id.currIcon)
-        hourlyRecycler = view.findViewById(R.id.hourlyRecycler)
-        dailyRecycler = view.findViewById(R.id.dailyRecycler)
         animLoading = view.findViewById(R.id.animationView)
 
-        hourlyAdapter = HourlyWeatherAdapter(context as Context, arrayListOf())
-        dailyAdapter = DailyWeatherAdapter(context as Context, arrayListOf())
-        layoutManagerHourly = LinearLayoutManager(context as Context,LinearLayoutManager.HORIZONTAL,false)
-        layoutManagerDaily = LinearLayoutManager(context as Context)
-        hourlyRecycler.adapter = hourlyAdapter
-        dailyRecycler.adapter = dailyAdapter
-        hourlyRecycler.layoutManager = layoutManagerHourly
-        dailyRecycler.layoutManager = layoutManagerDaily
+        setupRecyclerViews()
 
-        //viewModel.getWholeWeather(27.1783 , 31.1859,"metric" )
-        viewModel.getWholeWeather(
-            locationArgs.lat.toDouble(),
-            locationArgs.long.toDouble(),
-            locationArgs.unit)
+        if(viewModel.getStoredCurrentWeather() == null) {
+            Log.i("TAG", "neeeeeeeeeeeeeeeeeeeeeeeeewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            //viewModel.getWholeWeather(27.1783 , 31.1859,"metric")
+            viewModel.getWholeWeather(
+                locationArgs.lat.toDouble(),
+                locationArgs.long.toDouble(),
+                locationArgs.unit
+            )
 
-        viewModel.weatherFromNetwork.observe(viewLifecycleOwner){
-            Log.i("TAG", "onViewCreated: on observvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvve")
-            if(it!=null){
-                animLoading.visibility = View.GONE
-                binding.currCity.text = it.timezone
-                currDate.text = converter.getDateFormat(it.current.dt)
-                currTime.text = converter.getTimeFormat(it.current.dt)
-                temp.text = it.current.temp.toString()
-                desc.text = it.current.weather[0].description
-                Glide.with(context as Context)
-                    .load("https://openweathermap.org/img/wn/"+it.current.weather[0].icon+"@2x.png")
-                    .into(icon)
-                hourlyAdapter.setHourlyWeatherList(it.hourly)
-                dailyAdapter.setDailyWeatherList(it.daily)
+            viewModel.weatherFromNetwork.observe(viewLifecycleOwner) {
+                Log.i("TAG", "onViewCreated: on observvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvve")
+                if (it != null) {
+                    applyUIChange(it)
+                    viewModel.addWeatherInVM(it)
+                }
+                hourlyAdapter.notifyDataSetChanged()
+                dailyAdapter.notifyDataSetChanged()
             }
+
+        }
+        else{
+            Log.i("TAG", "elssssssssssssssssssssseeeeeeeeeeeeeeeeeeeee ")
+            connectivity = context?.getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if ( connectivity != null) {
+                info = connectivity!!.activeNetworkInfo
+                Log.i("TAG", "connectivity != null")
+                if (info != null) {
+                    if (info!!.state == NetworkInfo.State.CONNECTED) {
+                        Log.i("TAG", "uuuuuuuuuuuuuppppppppppppppdddddddddaaaaaaaattttttttteeeeeeeeeeee")
+                        viewModel.updateWeatherPrefs(this)
+                    }
+                    /*else{
+                        applyUIChange(viewModel.getStoredCurrentWeather())
+                    }*/
+                    Log.i("TAG", "info not nulllllllllll ")
+                }
+                else{
+                    Log.i("TAG", "info ========== nulllllllllll ")
+                }
+            }
+            applyUIChange(viewModel.getStoredCurrentWeather())
+
             hourlyAdapter.notifyDataSetChanged()
             dailyAdapter.notifyDataSetChanged()
         }
 
+    }
+
+    fun setupRecyclerViews(){
+        hourlyAdapter = HourlyWeatherAdapter(context as Context, arrayListOf())
+        dailyAdapter = DailyWeatherAdapter(context as Context, arrayListOf())
+        layoutManagerHourly = LinearLayoutManager(context as Context,LinearLayoutManager.HORIZONTAL,false)
+        layoutManagerDaily = LinearLayoutManager(context as Context)
+        binding.hourlyRecycler.adapter = hourlyAdapter
+        binding.dailyRecycler.adapter = dailyAdapter
+        binding.hourlyRecycler.layoutManager = layoutManagerHourly
+        binding.dailyRecycler.layoutManager = layoutManagerDaily
+    }
+
+    fun applyUIChange(currWeather:WeatherForecast?){
+        currWeather as WeatherForecast
+        animLoading.visibility = View.GONE
+        binding.currCity.text = currWeather.timezone
+        binding.currDate.text = Converters.getDateFormat(currWeather.current.dt)
+        binding.currTime.text = Converters.getTimeFormat(currWeather.current.dt)
+        binding.currTemp.text = currWeather.current.temp.toString()
+        binding.currDesc.text = currWeather.current.weather[0].description
+        Glide.with(context as Context)
+            .load("https://openweathermap.org/img/wn/"+currWeather.current.weather[0].icon+"@2x.png")
+            .into(binding.currIcon)
+        hourlyAdapter.setHourlyWeatherList(currWeather.hourly)
+        dailyAdapter.setDailyWeatherList(currWeather.daily)
     }
 }

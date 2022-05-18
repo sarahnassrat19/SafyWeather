@@ -2,16 +2,18 @@ package com.example.safyweather.db
 
 import android.content.Context
 import androidx.room.*
+import com.example.safyweather.model.AlertData
 import com.example.safyweather.model.WeatherAddress
 import com.example.safyweather.model.WeatherForecast
 import com.example.safyweather.utilities.WeatherConverter
 
-@Database(entities = arrayOf(WeatherForecast::class,WeatherAddress::class), version = 1)
+@Database(entities = arrayOf(WeatherForecast::class,WeatherAddress::class,AlertData::class), version = 1)
 @TypeConverters(WeatherConverter::class)
 abstract class WeatherDatabase :RoomDatabase(){
 
     abstract fun weatherDao():WeatherDAO
     abstract fun addressesDao():FavoriteAddressDAO
+    abstract fun alertsDao():AlertsDAO
 
     companion object{
         private var weatherDatabase:WeatherDatabase? = null

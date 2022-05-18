@@ -81,10 +81,22 @@ class Repository(var remoteSource: RemoteSourceInterface,
         prefEditor.commit()
     }
 
-    override fun getWeatherSharedPreferences(): WeatherForecast {
+    override fun getWeatherSharedPreferences(): WeatherForecast? {
         var weatherStr = appSHP.getString(MY_CURRENT_WEATHER_OBJ,"")
         var gson=Gson()
-        var weatherObj = gson.fromJson(weatherStr,WeatherForecast::class.java)
+        var weatherObj:WeatherForecast? = gson.fromJson(weatherStr,WeatherForecast::class.java)
         return weatherObj
+    }
+
+    override fun getAllAlertsInRepo(): LiveData<List<AlertData>> {
+        return localSource.getAllStoredAlerts()
+    }
+
+    override fun insertAlertInRepo(alert: AlertData) {
+        localSource.insertAlert(alert)
+    }
+
+    override fun deleteAlertInRepo(alert: AlertData) {
+        localSource.deleteAlert(alert)
     }
 }

@@ -36,7 +36,7 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
         position: Int
     ) {
         val oneDailyWeather:DailyWeather = dailyWeather[position]
-        holder.dailyDate.text = converter.getDayFormat(oneDailyWeather.dt)
+        holder.dailyDate.text = Converters.getDayFormat(oneDailyWeather.dt)
         holder.dailyDesc.text = oneDailyWeather.weather[0].description
         holder.dailyTemp.text = oneDailyWeather.temp.day.toString()
         Glide.with(context)
