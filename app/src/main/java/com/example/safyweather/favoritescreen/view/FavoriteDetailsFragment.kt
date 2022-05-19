@@ -21,6 +21,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.safyweather.MY_SHARED_PREFERENCES
 import com.example.safyweather.R
+import com.example.safyweather.arrayOfUnits
 import com.example.safyweather.databinding.FragmentFavoriteDetailsBinding
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.homescreen.view.DailyWeatherAdapter
@@ -28,6 +29,7 @@ import com.example.safyweather.homescreen.view.HourlyWeatherAdapter
 import com.example.safyweather.homescreen.viewmodel.HomeViewModel
 import com.example.safyweather.homescreen.viewmodel.HomeViewModelFactory
 import com.example.safyweather.model.Repository
+import com.example.safyweather.model.RepositoryInterface
 import com.example.safyweather.networking.RemoteSource
 import com.example.safyweather.utilities.Converters
 
@@ -41,12 +43,9 @@ class FavoriteDetailsFragment : Fragment() {
     lateinit var layoutManagerDaily: LinearLayoutManager
     lateinit var binding:FragmentFavoriteDetailsBinding
     private lateinit var navController: NavController
-
+    private var settings: com.example.safyweather.model.Settings? = null
     val weatherToShow:FavoriteDetailsFragmentArgs by navArgs()
-    var converter = Converters()
-
     /*val callback1 = requireActivity().onBackPressedDispatcher.addCallback(this) {
-
     }*/
 
     override fun onAttach(context: Context) {
@@ -87,6 +86,7 @@ class FavoriteDetailsFragment : Fragment() {
                 requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         detailsViewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
 
+        settings = detailsViewModel.getStoredSettings()
         setupRecyclerViews()
 
         binding.currCity.text = weatherToShow.weather.timezone
@@ -94,6 +94,26 @@ class FavoriteDetailsFragment : Fragment() {
         binding.currTime.text = Converters.getTimeFormat(weatherToShow.weather.current.dt)
         binding.currTemp.text = weatherToShow.weather.current.temp.toString()
         binding.currDesc.text = weatherToShow.weather.current.weather[0].description
+
+        binding.currHumidity.text = weatherToShow.weather.current.humidity.toString()
+        binding.currWindSpeed.text = weatherToShow.weather.current.wind_speed.toString()
+        binding.currClouds.text = weatherToShow.weather.current.clouds.toString()
+        binding.currPressure.text = weatherToShow.weather.current.pressure.toString()
+        when(arrayOfUnits[settings?.unit as Int]) {
+            "standard" ->{
+                binding.currUnit.text = getString(R.string.Kelvin)
+                binding.currWindUnit.text = getString(R.string.windMeter)
+            }
+            "metric" ->{
+                binding.currUnit.text = getString(R.string.Celsius)
+                binding.currWindUnit.text = getString(R.string.windMeter)
+            }
+            "imperial" ->{
+                binding.currUnit.text = getString(R.string.Fahrenheit)
+                binding.currWindUnit.text = getString(R.string.windMile)
+            }
+        }
+
         Glide.with(context as Context)
             .load("https://openweathermap.org/img/wn/"+weatherToShow.weather.current.weather[0].icon+"@2x.png")
             .into(binding.currIcon)
@@ -108,8 +128,8 @@ class FavoriteDetailsFragment : Fragment() {
 
     fun setupRecyclerViews(){
         Log.i("TAG", "setupRecyclerViews: ")
-        hourlyAdapter = HourlyWeatherAdapter(context as Context, arrayListOf())
-        dailyAdapter = DailyWeatherAdapter(context as Context, arrayListOf())
+        hourlyAdapter = HourlyWeatherAdapter(context as Context, arrayListOf(), arrayOfUnits[settings?.unit as Int])
+        dailyAdapter = DailyWeatherAdapter(context as Context, arrayListOf(),arrayOfUnits[settings?.unit as Int])
         layoutManagerHourly = LinearLayoutManager(context as Context,LinearLayoutManager.HORIZONTAL,false)
         layoutManagerDaily = LinearLayoutManager(context as Context)
         binding.hourlyRecycler.adapter = hourlyAdapter

@@ -3,6 +3,7 @@ package com.example.safyweather.favoritescreen.viewmodel
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.safyweather.model.RepositoryInterface
+import com.example.safyweather.model.Settings
 import com.example.safyweather.model.WeatherAddress
 import com.example.safyweather.model.WeatherForecast
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +73,13 @@ class FavoriteViewModel(private val repo: RepositoryInterface): ViewModel() {
         }
     }
 
+    fun setSettingsSharedPrefs(settings: Settings){
+        repo.addSettingsToSharedPreferences(settings)
+    }
+
+    fun getStoredSettings(): Settings? {
+        return repo.getSettingsSharedPreferences()
+    }
 
     //////////////////////////////////////////////////////
 }

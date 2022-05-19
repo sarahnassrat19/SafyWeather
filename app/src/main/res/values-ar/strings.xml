@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SafyWeather</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chanelName">SafyWeather</string>
+    <string name="channel_description">لا يوجد تنبيهات لليوم</string>
+
+    <string name="home">الرئيسية</string>
+    <string name="favorites">المفضلات</string>
+    <string name="alerts">التنبيهات</string>
+    <string name="settings">الاعدادات</string>
+    <string name="language">اللغة</string>
+    <string name="location">الموقع</string>
+    <string name="unit">الوحدات</string>
+    <string name="notifications">الاشعارات</string>
+    <string name="alertNot">الاشعارات</string>
+    <string name="alertAlarm">المنبه</string>
+
+    <string name="Celsius">°C</string>
+    <string name="Fahrenheit">°F</string>
+    <string name="Kelvin">°K</string>
+    <string name="windMeter">m/s</string>
+    <string name="windMile">M/h</string>
+
+    <string name="arabic">العربية</string>
+    <string name="english">الانجليزية</string>
+    <string name="standard">اساسى</string>
+    <string name="metric">قياسى</string>
+    <string name="imperial">امبراطورى</string>
+    <string name="gps">GPS</string>
+    <string name="maps">الخرائط</string>
+    <string name="enabled">مفعل</string>
+    <string name="disabled">غير مفعل</string>
+
+    <string name="metricDesc">(درجة الحرارة : بالسيليزيوس - سرعةالرياح : بالمتر لكل ثانية )</string>
+    <string name="standardDesc">(درجة الحرارة : بالكلفن - سرعةالرياح : بالمتر لكل ثانية ))</string>
+    <string name="imperialDesc">(درجة الحرارة : بالفهرنهايت - سرعةالرياح : بالميل لكل ساعة )</string>
+    <string name="initial_setup">اعداد التطبيق</string>
+    <string name="ok">حسنا</string>
+    <string name="save">حفظ</string>
+    <string name="delete">حذف</string>
+    <string name="cancel">الغاء</string>
+    <string name="deleteMsg">هل تريد حقا ان تحذف هذا العنصر ؟</string>
+    <string name="saveLocation">هل تريد ان تحفظ هذا الموقع ؟</string>
+    <string name="initial_setup_desc">كيف تريد ان تحدد موقعك ؟</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="pressure">الضغط</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="clouds">السحب</string>
+    <string name="from">from</string>
+    <string name="to">to</string>
+
+
+</resources>

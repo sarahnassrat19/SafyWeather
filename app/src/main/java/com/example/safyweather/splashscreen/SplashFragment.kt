@@ -9,12 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.safyweather.MY_SHARED_PREFERENCES
-import com.example.safyweather.R
+import com.example.safyweather.*
 import com.example.safyweather.databinding.FragmentSplashBinding
 import com.example.safyweather.db.LocalSource
+import com.example.safyweather.utilities.LocaleHelper
 import com.example.safyweather.model.Repository
 import com.example.safyweather.model.RepositoryInterface
+import com.example.safyweather.model.Settings
 import com.example.safyweather.model.WeatherForecast
 import com.example.safyweather.networking.RemoteSource
 
@@ -23,6 +24,7 @@ class SplashFragment : Fragment() {
     private lateinit var binding: FragmentSplashBinding
     private lateinit var navController: NavController
     private var currentWeather:WeatherForecast? = null
+    private var settings:Settings? = null
     private lateinit var repo:RepositoryInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +41,10 @@ class SplashFragment : Fragment() {
                 navController.navigate(R.id.action_splashFragment_to_initialFragment)
             }
             else{
-                val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment(currentWeather?.lat?.toFloat() as Float,currentWeather?.lon?.toFloat() as Float,"metric")
+                val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment(
+                    currentWeather?.lat?.toFloat() as Float,
+                    currentWeather?.lon?.toFloat() as Float,
+                    arrayOfUnits[settings?.unit as Int])
                 navController.navigate(action)
             }
         }, 1000)
@@ -56,7 +61,19 @@ class SplashFragment : Fragment() {
             requireContext(),
             requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE))
         currentWeather = repo.getWeatherSharedPreferences()
-
+        settings = repo.getSettingsSharedPreferences()
+        if(settings == null){
+            this.settings = Settings(ENGLISH,STANDARD,NONE,ENABLED)
+            repo.addSettingsToSharedPreferences(settings as Settings)
+        }
+        else{
+            if(settings?.language as Boolean) {
+                LocaleHelper.setLocale(requireContext(), "en")
+            }
+            else{
+                LocaleHelper.setLocale(requireContext(), "ar")
+            }
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.safyweather.alertscreen
+package com.example.safyweather.alertscreen.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

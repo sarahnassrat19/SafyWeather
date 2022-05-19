@@ -23,7 +23,7 @@ interface RepositoryInterface {
     //fun updateWeatherDatabase()
 
     fun addSettingsToSharedPreferences(settings:Settings)
-    fun getSettingsSharedPreferences():Settings
+    fun getSettingsSharedPreferences():Settings?
 
     fun addWeatherToSharedPreferences(weather: WeatherForecast)
     fun getWeatherSharedPreferences(): WeatherForecast?

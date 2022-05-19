@@ -123,14 +123,14 @@ class FavoriteFragment : Fragment() ,OnFavWeatherClickListener{
 
     override fun onRemoveBtnClick(address: WeatherAddress,weather:WeatherForecast) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setMessage("Are you sure to delete this item ?")
+        dialogBuilder.setMessage(getString(R.string.deleteMsg))
             .setCancelable(false)
-            .setPositiveButton("delete") { dialog, id ->
+            .setPositiveButton(getString(R.string.delete)) { dialog, id ->
                 favViewModel.removeAddressFromFavorites(address)
                 favViewModel.removeOneFavWeather(weather)
                 dialog.cancel()
             }
-            .setNegativeButton("Cancel") { dialog, id -> dialog.cancel() }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, id -> dialog.cancel() }
         val alert = dialogBuilder.create()
         alert.show()
         //Log.i("TAG", "onRemoveBtnClick: adddddddddddddddrrrrrreeeeeessssssssssssss")

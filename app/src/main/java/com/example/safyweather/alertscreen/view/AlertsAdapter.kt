@@ -1,7 +1,6 @@
-package com.example.safyweather.alertscreen
+package com.example.safyweather.alertscreen.view
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.safyweather.R
-import com.example.safyweather.favoritescreen.view.OnFavWeatherClickListener
 import com.example.safyweather.model.AlertData
 import com.example.safyweather.utilities.Converters
 
@@ -34,7 +32,7 @@ class AlertsAdapter :RecyclerView.Adapter<AlertsAdapter.AlertsViewHolder> {
         return AlertsViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AlertsAdapter.AlertsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AlertsViewHolder, position: Int) {
         holder.fromTime.text = "${alerts[position].fromDate.hours}:${alerts[position].fromDate.minutes}"
         holder.fromDate.text = Converters.getDateFromInt(alerts[position].fromDate.date,alerts[position].fromDate.month,alerts[position].fromDate.year)
         //Log.i("TAG", "onBindViewHolder: ${alerts[position].fromDate.date} --- ${alerts[position].fromDate.month} --- ${alerts[position].fromDate.year}")

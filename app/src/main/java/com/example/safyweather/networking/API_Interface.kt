@@ -11,5 +11,6 @@ interface API_Interface {
                                    @Query("lon") long:Double,
                                    @Query("units") unit:String,
                                    @Query("exclude") exclude:String,
+                                   @Query("lang") lang:String,
                                    @Query("appid")appid:String): Response<WeatherForecast>
 }

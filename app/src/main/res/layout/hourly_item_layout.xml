@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
+    android:layout_width="120dp"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corners"
     android:layout_margin="5dp">
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="12:00"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,26 +34,53 @@
         android:id="@+id/hourlyTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="40°c"
+        android:text="40"
         android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:paddingHorizontal="5dp"
         android:paddingBottom="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/hourlyTempUnit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hourlyTime" />
+
+    <TextView
+        android:id="@+id/hourlyTempUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Celsius"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/hourlyTemp"
+        app:layout_constraintTop_toBottomOf="@+id/hourlyTime"
+        app:layout_constraintBottom_toTopOf="@+id/hourlyIcon"/>
 
     <TextView
         android:id="@+id/hourlyWindSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12 m/sec"
+        android:text="12.12"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:paddingHorizontal="9dp"
         android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/hourlyWindUnit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hourlyIcon" />
+
+    <TextView
+        android:id="@+id/hourlyWindUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/windMeter"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/hourlyWindSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/hourlyIcon"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

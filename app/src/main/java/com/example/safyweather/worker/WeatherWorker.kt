@@ -1,4 +1,4 @@
-package com.example.safyweather.alertscreen
+package com.example.safyweather.worker
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,7 +14,11 @@ import com.example.safyweather.NOTIFICATION_CHANNEL
 import com.example.safyweather.NOTIFICATION_ID
 import com.example.safyweather.NOTIFICATION_NAME
 import com.example.safyweather.R
+import com.example.safyweather.alertscreen.view.AlertsFragment
 import com.example.safyweather.utilities.vectorToBitmap
+import android.media.RingtoneManager
+import android.net.Uri
+
 
 class WeatherWorker(var context: Context, var params: WorkerParameters):Worker(context,params) {
 
@@ -36,6 +40,7 @@ class WeatherWorker(var context: Context, var params: WorkerParameters):Worker(c
         val titleNotification = applicationContext.getString(R.string.chanelName)
         val subtitleNotification = applicationContext.getString(R.string.channel_description)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
+        val uri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notification = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL)
             .setLargeIcon(bitmap)
             .setSmallIcon(R.mipmap.weatherlogo)
@@ -44,6 +49,7 @@ class WeatherWorker(var context: Context, var params: WorkerParameters):Worker(c
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setSound(uri)
 
         notification.priority = NotificationCompat.PRIORITY_MAX
 
@@ -55,8 +61,8 @@ class WeatherWorker(var context: Context, var params: WorkerParameters):Worker(c
 
             channel.enableLights(true)
             channel.lightColor = Color.RED
-            channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+            //channel.enableVibration(true)
+            //channel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(id, notification.build())

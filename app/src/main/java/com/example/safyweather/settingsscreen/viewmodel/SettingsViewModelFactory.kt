@@ -1,11 +1,11 @@
-package com.example.safyweather.alertscreen
+package com.example.safyweather.settingsscreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.safyweather.model.RepositoryInterface
 
-class AlertsViewModelFactory(private val repo: RepositoryInterface):ViewModelProvider.Factory {
+class SettingsViewModelFactory(private val repo: RepositoryInterface):ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AlertsViewModel(repo) as T
+        return SettingsViewModel(repo) as T
     }
 }

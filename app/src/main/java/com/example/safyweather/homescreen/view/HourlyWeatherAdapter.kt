@@ -16,11 +16,12 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
 
     private var context: Context
     private var hourlyWeather:List<HourlyWeather>
-    var converter = Converters()
+    private val tempUnit:String
 
-    constructor(context: Context,hourlyWeather:List<HourlyWeather>){
+    constructor(context: Context,hourlyWeather:List<HourlyWeather>,tempUnit:String){
         this.context = context
         this.hourlyWeather = hourlyWeather
+        this.tempUnit = tempUnit
     }
 
     override fun onCreateViewHolder(
@@ -39,6 +40,20 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
         holder.hourlyTime.text = Converters.getTimeFormat(oneHourlyWeather.dt)
         holder.hourlyTemp.text = oneHourlyWeather.temp.toString()
         holder.hourlyWindSpeed.text = oneHourlyWeather.wind_speed.toString()
+        when(this.tempUnit) {
+            "standard" ->{
+                holder.tempUnit.text = context.getString(R.string.Kelvin)
+                holder.windUnit.text = context.getString(R.string.windMeter)
+            }
+            "metric" ->{
+                holder.tempUnit.text = context.getString(R.string.Celsius)
+                holder.windUnit.text = context.getString(R.string.windMeter)
+            }
+            "imperial" ->{
+                holder.tempUnit.text = context.getString(R.string.Fahrenheit)
+                holder.windUnit.text = context.getString(R.string.windMile)
+            }
+        }
         Glide.with(context)
             .load("https://openweathermap.org/img/wn/"+oneHourlyWeather.weather[0].icon+"@2x.png")
             .into(holder.hourlyIcon)
@@ -62,6 +77,10 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
         get() = view.findViewById(R.id.hourlyWindSpeed)
         val hourlyIcon:ImageView
         get() = view.findViewById(R.id.hourlyIcon)
+        val tempUnit:TextView
+        get() = view.findViewById(R.id.hourlyTempUnit)
+        val windUnit:TextView
+            get() = view.findViewById(R.id.hourlyWindUnit)
     }
 
 }
