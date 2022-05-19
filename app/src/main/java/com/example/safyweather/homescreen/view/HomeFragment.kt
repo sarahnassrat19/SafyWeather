@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerViews()
 
-        if(viewModel.getStoredCurrentWeather() == null) {
+        if(viewModel.getStoredCurrentWeather() == null||locationArgs.comeFrom) {
             Log.i("TAG", "neeeeeeeeeeeeeeeeeeeeeeeeewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
             //viewModel.getWholeWeather(27.1783 , 31.1859,"metric")
             viewModel.getWholeWeather(
@@ -100,9 +100,6 @@ class HomeFragment : Fragment() {
                         Log.i("TAG", "uuuuuuuuuuuuuppppppppppppppdddddddddaaaaaaaattttttttteeeeeeeeeeee")
                         viewModel.updateWeatherPrefs(this)
                     }
-                    /*else{
-                        applyUIChange(viewModel.getStoredCurrentWeather())
-                    }*/
                     Log.i("TAG", "info not nulllllllllll ")
                 }
                 else{

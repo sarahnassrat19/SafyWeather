@@ -50,5 +50,6 @@
     <string name="to">to</string>
     <string name="warning">when you disable the notifications you cannot receive alerts about the weather!</string>
     <string name="sorry">Sorry cannot save this alarm! you should enable the notifications</string>
+    <string name="networkWarning">please, check your network!</string>
 
 </resources>

@@ -52,6 +52,7 @@
     <string name="to">الى</string>
     <string name="warning">عندما تبطل الاشعارات لا يمكنك استلام التنبيهات بخصوص الطقس!</string>
     <string name="sorry">نأسف لا يمكنك حفظ هذا التنبيه! يجب عليك تفعيل الاشعارات</string>
+    <string name="networkWarning">من فضلك تأكد من اتصالك بالشبكة!</string>
 
 
 </resources>

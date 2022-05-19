@@ -60,7 +60,7 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
     }
 
     override fun getItemCount(): Int {
-        return dailyWeather.size
+        return dailyWeather.size-1
     }
 
     fun setDailyWeatherList(dailyWeatherList:List<DailyWeather>){

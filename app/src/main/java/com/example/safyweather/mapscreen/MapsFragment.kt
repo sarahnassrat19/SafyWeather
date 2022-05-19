@@ -92,7 +92,7 @@ class MapsFragment : Fragment() {
                             settings?.location = 2
                             favViewModel.setSettingsSharedPrefs(settings as com.example.safyweather.model.Settings)
                             val action = MapsFragmentDirections.actionMapsFragmentToHomeFragment(it.latitude.toFloat(),it.longitude.toFloat(),
-                                arrayOfUnits[settings?.unit as Int])
+                                arrayOfUnits[settings?.unit as Int],true)
                             navController.navigate(action)
                         }
                         null -> {

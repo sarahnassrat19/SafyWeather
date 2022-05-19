@@ -57,7 +57,7 @@ class InitialFragment : Fragment() {
             settings?.location = 1
             repo.addSettingsToSharedPreferences(settings as com.example.safyweather.model.Settings)
             val action = InitialFragmentDirections.actionInitialFragmentToHomeFragment(
-                loc.latitude.toFloat(),loc.longitude.toFloat(), arrayOfUnits[settings?.unit as Int])
+                loc.latitude.toFloat(),loc.longitude.toFloat(), arrayOfUnits[settings?.unit as Int],true)
             navController.navigate(action)
         }
     }

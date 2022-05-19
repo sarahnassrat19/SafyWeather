@@ -61,7 +61,7 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.HourlyWea
     }
 
     override fun getItemCount(): Int {
-        return hourlyWeather.size
+        return hourlyWeather.size-24
     }
 
     fun setHourlyWeatherList(hourlyWeatherList:List<HourlyWeather>){

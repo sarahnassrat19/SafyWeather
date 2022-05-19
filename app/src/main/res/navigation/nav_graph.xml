@@ -22,6 +22,10 @@
             android:name="unit"
             android:defaultValue="standard"
             app:argType="string" />
+        <argument
+            android:name="comeFrom"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

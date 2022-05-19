@@ -1,7 +1,11 @@
 package com.example.safyweather.settingsscreen.view
 
+import android.app.Service
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +35,8 @@ class SettingsFragment : Fragment() {
     lateinit var binding:FragmentSettingsBinding
     private var settings: Settings? = null
     lateinit var navController: NavController
+    var connectivity : ConnectivityManager? = null
+    var info : NetworkInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,13 +86,52 @@ class SettingsFragment : Fragment() {
         binding.GPS.setOnClickListener{
             settings?.location = 1
             settingsViewModel.setSettingsSharedPrefs(settings as Settings)
+            connectivity = context?.getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if ( connectivity != null) {
+                info = connectivity!!.activeNetworkInfo
+                Log.i("TAG", "connectivity != null")
+                if (info != null) {
+                    if (info!!.state == NetworkInfo.State.CONNECTED) {
+
+                    }
+                    else{
+                        val dialogBuilder = AlertDialog.Builder(requireContext())
+                        dialogBuilder.setMessage(getString(R.string.networkWarning))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok)) { dialog, id ->
+                                dialog.cancel()
+                            }
+                        val alert = dialogBuilder.create()
+                        alert.show()
+                    }
+                }
+            }
         }
 
         binding.map.setOnClickListener{
             settings?.location = 2
             settingsViewModel.setSettingsSharedPrefs(settings as Settings)
-            val action = SettingsFragmentDirections.actionSettingsFragmentToMapsFragment(true)
-            navController.navigate(action)
+            connectivity = context?.getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if ( connectivity != null) {
+                info = connectivity!!.activeNetworkInfo
+                Log.i("TAG", "connectivity != null")
+                if (info != null) {
+                    if (info!!.state == NetworkInfo.State.CONNECTED) {
+                        val action = SettingsFragmentDirections.actionSettingsFragmentToMapsFragment(true)
+                        navController.navigate(action)
+                    }
+                    else{
+                        val dialogBuilder = AlertDialog.Builder(requireContext())
+                        dialogBuilder.setMessage(getString(R.string.networkWarning))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok)) { dialog, id ->
+                                dialog.cancel()
+                            }
+                        val alert = dialogBuilder.create()
+                        alert.show()
+                    }
+                }
+            }
         }
 
         binding.standardUnit.setOnClickListener{
