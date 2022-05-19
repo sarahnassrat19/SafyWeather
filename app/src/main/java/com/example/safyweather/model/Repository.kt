@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.safyweather.MY_CURRENT_WEATHER_OBJ
 import com.example.safyweather.MY_SETTINGS_PREFS
+import com.example.safyweather.arrayOfLangs
 import com.example.safyweather.db.LocalSourceInterface
 import com.example.safyweather.networking.RemoteSourceInterface
 import com.google.gson.Gson
@@ -28,7 +29,17 @@ class Repository(var remoteSource: RemoteSourceInterface,
 
     override suspend fun getCurrentWeatherWithLocationInRepo(lat:Double,long:Double,unit:String): WeatherForecast {
         Log.i("TAG", "getCurrentWeatherWithLocationInRepoooooooooooooo: ")
-        return remoteSource.getCurrentWeatherWithLocation(lat,long,unit)
+
+        if(getSettingsSharedPreferences()?.language as Boolean){
+
+            var weatherinrepo = remoteSource.getCurrentWeatherWithLocation(lat,long,unit,arrayOfLangs[0])
+            Log.i("TAG", "getCurrentWeatherWithLocationInRepo: ${weatherinrepo.current.weather[0].description} ")
+            return weatherinrepo
+        }
+
+        var weatherinrepo2 = remoteSource.getCurrentWeatherWithLocation(lat,long,unit,arrayOfLangs[1])
+        Log.i("TAG", "getCurrentWeatherWithLocationInRepo: ${weatherinrepo2.current.weather[0].description} ")
+        return weatherinrepo2
     }
 
     override val storedAddresses: LiveData<List<WeatherAddress>>
@@ -66,10 +77,10 @@ class Repository(var remoteSource: RemoteSourceInterface,
         prefEditor.commit()
     }
 
-    override fun getSettingsSharedPreferences(): Settings {
+    override fun getSettingsSharedPreferences(): Settings? {
         var settingStr = appSHP.getString(MY_SETTINGS_PREFS,"")
         var gson=Gson()
-        var settingsObj = gson.fromJson(settingStr,Settings::class.java)
+        var settingsObj:Settings? = gson.fromJson(settingStr,Settings::class.java)
         return settingsObj
     }
 

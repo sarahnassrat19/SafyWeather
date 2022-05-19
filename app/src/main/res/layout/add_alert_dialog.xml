@@ -18,7 +18,7 @@
             android:layout_weight="0.5"
             android:layout_margin="10dp"
             android:textAlignment="center"
-            android:text="from"
+            android:text="@string/from"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="18dp"
@@ -29,7 +29,7 @@
             android:layout_weight="0.5"
             android:layout_margin="10dp"
             android:textAlignment="center"
-            android:text="to"
+            android:text="@string/to"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="18dp"
@@ -131,8 +131,8 @@
             android:id="@+id/alarmForAlert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="80dp"
-            android:text="Alarm"
+            android:layout_marginRight="30dp"
+            android:text="@string/alertAlarm"
             android:textColor="@color/white"
             android:textSize="17dp" />
 
@@ -140,7 +140,7 @@
             android:id="@+id/notificationForAlert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notification"
+            android:text="@string/notifications"
             android:textColor="@color/white"
             android:textSize="17dp" />
 
@@ -155,6 +155,6 @@
         android:background="@drawable/buttons_rounded_corners"
         app:backgroundTint="@color/mySecondaryColor"
         android:layout_gravity="center"
-        android:text="Save" />
+        android:text="@string/save" />
 
 </LinearLayout>

@@ -10,17 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.safyweather.utilities.Converters
 import com.example.safyweather.R
+import com.example.safyweather.arrayOfUnits
 import com.example.safyweather.model.DailyWeather
 
 class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherViewHolder> {
 
     private var context: Context
     private var dailyWeather:List<DailyWeather>
-    var converter = Converters()
+    private val tempUnit:String
 
-    constructor(context: Context,dailyWeather:List<DailyWeather>){
+    constructor(context: Context,dailyWeather:List<DailyWeather>,tempUnit:String){
         this.context = context
         this.dailyWeather = dailyWeather
+        this.tempUnit = tempUnit
     }
 
     override fun onCreateViewHolder(
@@ -38,7 +40,19 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
         val oneDailyWeather:DailyWeather = dailyWeather[position]
         holder.dailyDate.text = Converters.getDayFormat(oneDailyWeather.dt)
         holder.dailyDesc.text = oneDailyWeather.weather[0].description
-        holder.dailyTemp.text = oneDailyWeather.temp.day.toString()
+        holder.dailyTemp.text = "${oneDailyWeather.temp.max}/${oneDailyWeather.temp.min}"
+        when(this.tempUnit) {
+            "standard" ->{
+                holder.dailyUnit.text = context.getString(R.string.Kelvin)
+            }
+            "metric" ->{
+                holder.dailyUnit.text = context.getString(R.string.Celsius)
+            }
+            "imperial" ->{
+                holder.dailyUnit.text = context.getString(R.string.Fahrenheit)
+            }
+        }
+
         Glide.with(context)
             .load("https://openweathermap.org/img/wn/"+oneDailyWeather.weather[0].icon+"@2x.png")
             .into(holder.dailyIcon)
@@ -46,7 +60,7 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
     }
 
     override fun getItemCount(): Int {
-        return dailyWeather.size
+        return dailyWeather.size-1
     }
 
     fun setDailyWeatherList(dailyWeatherList:List<DailyWeather>){
@@ -62,5 +76,7 @@ class DailyWeatherAdapter:RecyclerView.Adapter<DailyWeatherAdapter.DailyWeatherV
             get() =view.findViewById(R.id.dailyTemp)
         val dailyIcon:ImageView
             get() = view.findViewById(R.id.dailyIcon)
+        val dailyUnit:TextView
+            get() = view.findViewById(R.id.dailyUnit)
     }
 }

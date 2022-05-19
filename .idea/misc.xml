@@ -6,12 +6,13 @@
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable-v24/buttons_rounded_corners.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/buttons_rounded_corners.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/ic_add.xml" value="0.26614583333333336" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/ic_favorite.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/ic_menu.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/drawable/rounded_corners.xml" value="0.26614583333333336" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/activity_main.xml" value="0.2359375" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/add_alert_dialog.xml" value="0.406720741599073" />
-        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/alert_item_layout.xml" value="0.1" />
-        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/daily_item_layout.xml" value="0.25" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/alert_item_layout.xml" value="0.4" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/daily_item_layout.xml" value="0.536" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/date_picker_dialog.xml" value="0.264" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/favorite_item_layout.xml" value="0.264" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_alerts.xml" value="0.25" />
@@ -21,7 +22,7 @@
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_initial.xml" value="0.25" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_main_navigation.xml" value="0.25" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_maps.xml" value="0.25" />
-        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/fragment_splash.xml" value="0.25" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/header_layout.xml" value="0.25" />
         <entry key="..\:/ITI/kotlin/KotlinProject/SafyWeather/app/src/main/res/layout/hourly_item_layout.xml" value="1.0" />

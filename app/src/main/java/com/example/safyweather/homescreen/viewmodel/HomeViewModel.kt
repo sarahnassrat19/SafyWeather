@@ -21,7 +21,7 @@ class HomeViewModel(private val repo:RepositoryInterface):ViewModel() {
         }
     }
 
-    fun getStoredSettings(): Settings{
+    fun getStoredSettings(): Settings?{
         return repo.getSettingsSharedPreferences()
     }
 

@@ -27,7 +27,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.safyweather.MY_SHARED_PREFERENCES
 import com.example.safyweather.R
+import com.example.safyweather.arrayOfUnits
+import com.example.safyweather.db.LocalSource
+import com.example.safyweather.model.Repository
+import com.example.safyweather.model.RepositoryInterface
+import com.example.safyweather.networking.RemoteSource
 import com.google.android.gms.location.*
 
 
@@ -39,16 +45,19 @@ class InitialFragment : Fragment() {
     lateinit var navController:NavController
     var connectivity : ConnectivityManager? = null
     var info : NetworkInfo? = null
-    val TAG="TAG"
+    private var settings: com.example.safyweather.model.Settings? = null
+    private lateinit var repo: RepositoryInterface
 
     val locationCallBack = object : LocationCallback(){
         override fun onLocationResult(myLocation: LocationResult?) {
             super.onLocationResult(myLocation)
-            Log.i(TAG, "onLocationResult:")
+            Log.i("TAG", "onLocationResult:")
             var loc = myLocation?.lastLocation as Location
-            Log.i(TAG, "lattttttt :"+loc.latitude+"looooooong : "+loc.longitude)
+            Log.i("TAG", "lattttttt :"+loc.latitude+"looooooong : "+loc.longitude)
+            settings?.location = 1
+            repo.addSettingsToSharedPreferences(settings as com.example.safyweather.model.Settings)
             val action = InitialFragmentDirections.actionInitialFragmentToHomeFragment(
-                loc.latitude.toFloat(),loc.longitude.toFloat(),"metric")
+                loc.latitude.toFloat(),loc.longitude.toFloat(), arrayOfUnits[settings?.unit as Int],true)
             navController.navigate(action)
         }
     }
@@ -65,7 +74,15 @@ class InitialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(activity as AppCompatActivity,R.id.nav_host_fragment)
+        repo = Repository.getInstance(
+            RemoteSource.getInstance(),
+            LocalSource.getInstance(requireActivity()),
+            requireContext(),
+            requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE))
+        settings = repo.getSettingsSharedPreferences()
+
+        Log.i("TAG", "onViewCreated: sssssssssssssssaaaaaaaaaaaaaavvvvvvvvvvvveeeeeeeeeeeee el settings")
+        navController = Navigation.findNavController(requireActivity(),R.id.nav_host_fragment)
         fusedLocation = LocationServices.getFusedLocationProviderClient(requireContext())
         initialDialog = Dialog(requireContext())
         initialDialog.setContentView(R.layout.initial_setup_dialog)
@@ -85,7 +102,7 @@ class InitialFragment : Fragment() {
                     if (info!!.state == NetworkInfo.State.CONNECTED) {
                         if(gpsLocation.isChecked) {
                             getFreshLocationRequest()
-                            Log.i(TAG, "get location finnnnished")
+                            Log.i("TAG", "get location finnnnished")
                         }
                         else{
                             val action = InitialFragmentDirections.actionInitialFragmentToMapsFragment(true)
@@ -103,7 +120,7 @@ class InitialFragment : Fragment() {
     }
 
     fun checkPermissions():Boolean{
-        Log.i(TAG, "checkPermissions: ")
+        Log.i("TAG", "checkPermissions: ")
         return ActivityCompat.checkSelfPermission(context as Context,
             android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context as Context,
@@ -121,7 +138,7 @@ class InitialFragment : Fragment() {
     }
 
     fun requestLocationPermissions(){
-        Log.i(TAG, "requestPermissions: ")
+        Log.i("TAG", "requestPermissions: ")
         requestPermissions(arrayOf(
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -130,12 +147,12 @@ class InitialFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
-        Log.i(TAG, "onRequestPermissionsResult: ")
+        Log.i("TAG", "onRequestPermissionsResult: ")
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if(requestCode == PERMISSION_ID){
             if(grantResults.size>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Log.i(TAG, "onRequestPermissionsResult: oooooooooooooooooooooooooooooooooooooooooooooo")
+                Log.i("TAG", "onRequestPermissionsResult: oooooooooooooooooooooooooooooooooooooooooooooo")
                 requestNewLocationData()
             }
             else{
@@ -146,7 +163,7 @@ class InitialFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     fun requestNewLocationData(){
-        Log.i(TAG, "requestNewLocationData: ")
+        Log.i("TAG", "requestNewLocationData: ")
         val locationRequest = LocationRequest.create()
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         locationRequest.setInterval(5)
@@ -156,12 +173,11 @@ class InitialFragment : Fragment() {
         fusedLocation.requestLocationUpdates(locationRequest,locationCallBack,Looper.myLooper())
     }
 
-
     fun getFreshLocationRequest(){
         if(checkPermissions()) {
-            Log.i(TAG, "if --> permissions checked successfully ")
+            Log.i("TAG", "if --> permissions checked successfully ")
             if(isLocationEnabled()) {
-                Log.i(TAG, "if --> permissions enabeled successfully ")
+                Log.i("TAG", "if --> permissions enabeled successfully ")
                 requestNewLocationData();
             }
             else{
@@ -169,7 +185,7 @@ class InitialFragment : Fragment() {
             }
         }
         else{
-            Log.i(TAG, "else: --> request permissions ")
+            Log.i("TAG", "else: --> request permissions ")
             Toast.makeText(activity, "noPermission", Toast.LENGTH_SHORT).show();
             requestLocationPermissions()
         }

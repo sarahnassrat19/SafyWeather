@@ -1,4 +1,4 @@
-package com.example.safyweather.alertscreen
+package com.example.safyweather.alertscreen.view
 
 import android.app.Dialog
 import android.content.Context
@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
@@ -24,18 +23,20 @@ import com.example.safyweather.MY_SHARED_PREFERENCES
 import com.example.safyweather.NOTIFICATION_ID
 import com.example.safyweather.NOTIFICATION_WORK
 import com.example.safyweather.R
-import com.example.safyweather.databinding.DatePickerDialogBinding
+import com.example.safyweather.alertscreen.viewmodel.AlertsViewModel
+import com.example.safyweather.alertscreen.viewmodel.AlertsViewModelFactory
+import com.example.safyweather.worker.WeatherWorker
 import com.example.safyweather.databinding.FragmentAlertsBinding
 import com.example.safyweather.db.LocalSource
-import com.example.safyweather.favoritescreen.view.FavoriteFragmentDirections
 import com.example.safyweather.model.AlertData
 import com.example.safyweather.model.Repository
+import com.example.safyweather.model.Settings
 import com.example.safyweather.networking.RemoteSource
 import com.example.safyweather.utilities.Converters
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AlertsFragment : Fragment(),OnAlertClickListener {
+class AlertsFragment : Fragment(), OnAlertClickListener {
 
     private lateinit var binding:FragmentAlertsBinding
     private lateinit var navController: NavController
@@ -49,13 +50,15 @@ class AlertsFragment : Fragment(),OnAlertClickListener {
     private lateinit var fromTimetxt:TextView
     private lateinit var toTimetxt:TextView*/
 
-    private lateinit var alertViewModel:AlertsViewModel
-    private lateinit var alertViewModelFactory:AlertsViewModelFactory
-    private lateinit var alertAdapter:AlertsAdapter
+    private lateinit var alertViewModel: AlertsViewModel
+    private lateinit var alertViewModelFactory: AlertsViewModelFactory
+    private lateinit var alertAdapter: AlertsAdapter
     private lateinit var alertLayoutManager:LinearLayoutManager
+    private var settings: com.example.safyweather.model.Settings? = null
 
     var alertFromDate:Date? = Date()
     var alertToDate:Date? = Date()
+    var notifyType:Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +81,8 @@ class AlertsFragment : Fragment(),OnAlertClickListener {
             requireContext(),
             requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         alertViewModel = ViewModelProvider(this,alertViewModelFactory).get(AlertsViewModel::class.java)
+
+        settings = alertViewModel.getStoredSettings()
 
         setupRecycler()
 
@@ -103,6 +108,12 @@ class AlertsFragment : Fragment(),OnAlertClickListener {
         var saveBtn:Button = addAlert.findViewById(R.id.addAlertBtn)
         var notification:RadioButton = addAlert.findViewById(R.id.notificationForAlert)
         var alarm:RadioButton = addAlert.findViewById(R.id.alarmForAlert)
+
+        notification.isChecked = true
+
+        notification.setOnClickListener{ notifyType = true }
+
+        alarm.setOnClickListener{notifyType = false}
 
         binding.floatingAddAlert.setOnClickListener{
             addAlert.show()
@@ -206,27 +217,39 @@ class AlertsFragment : Fragment(),OnAlertClickListener {
                 //toLinearHandler()
             }
             saveBtn.setOnClickListener {
+                if(settings?.notification as Boolean) {
 
-                if(alertFromDate != null && alertToDate != null) {
-                    newAlert = AlertData(alertFromDate as Date, alertToDate as Date)
+                    if (alertFromDate != null && alertToDate != null) {
+                        newAlert = AlertData(alertFromDate as Date, alertToDate as Date, notifyType)
 
-                    val customCalendar = Calendar.getInstance()
-                    customCalendar.set(
-                        alertFromDate!!.year,
-                        alertFromDate!!.month,
-                        alertFromDate!!.date,
-                        alertFromDate!!.hours,
-                        alertFromDate!!.minutes,
-                        0
-                    )
-                    val customTime = customCalendar.timeInMillis
-                    val currentTime = System.currentTimeMillis()
-                    if (customTime > currentTime) {
-                        val data = Data.Builder().putInt(NOTIFICATION_ID, 0).build()
-                        val delay = customTime - currentTime
-                        scheduleNotification(delay, data)
+                        val customCalendar = Calendar.getInstance()
+                        customCalendar.set(
+                            alertFromDate!!.year,
+                            alertFromDate!!.month,
+                            alertFromDate!!.date,
+                            alertFromDate!!.hours,
+                            alertFromDate!!.minutes,
+                            0
+                        )
+                        val customTime = customCalendar.timeInMillis
+                        val currentTime = System.currentTimeMillis()
+                        if (customTime > currentTime) {
+                            val data = Data.Builder().putInt(NOTIFICATION_ID, 0).build()
+                            val delay = customTime - currentTime
+                            scheduleNotification(delay, data)
+                        }
+                        alertViewModel.addAlertInVM(newAlert)
                     }
-                    alertViewModel.addAlertInVM(newAlert)
+                }
+                else{
+                    val dialogBuilder = AlertDialog.Builder(requireContext())
+                    dialogBuilder.setMessage(getString(R.string.sorry))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok)) { dialog, id ->
+                            dialog.cancel()
+                        }
+                    val alert = dialogBuilder.create()
+                    alert.show()
                 }
                 addAlert.dismiss()
                 //saveAlertHandler()
@@ -264,13 +287,13 @@ class AlertsFragment : Fragment(),OnAlertClickListener {
 
     override fun onRemoveAlertBtnClick(myAlert: AlertData) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setMessage("Are you sure to delete this item ?")
+        dialogBuilder.setMessage(getString(R.string.deleteMsg))
             .setCancelable(false)
-            .setPositiveButton("delete") { dialog, id ->
+            .setPositiveButton(getString(R.string.delete)) { dialog, id ->
                 alertViewModel.removeAlertInVM(myAlert)
                 dialog.cancel()
             }
-            .setNegativeButton("Cancel"){ dialog, id -> dialog.cancel()}
+            .setNegativeButton(getString(R.string.cancel)){ dialog, id -> dialog.cancel()}
         val alert = dialogBuilder.create()
         alert.show()
     }

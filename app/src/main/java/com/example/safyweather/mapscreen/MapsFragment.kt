@@ -1,4 +1,4 @@
-package com.example.safyweather
+package com.example.safyweather.mapscreen
 
 import android.content.Context
 import android.location.Address
@@ -17,17 +17,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.navigateUp
+import com.example.safyweather.MY_SHARED_PREFERENCES
+import com.example.safyweather.R
+import com.example.safyweather.arrayOfUnits
 import com.example.safyweather.db.LocalSource
 import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModel
 import com.example.safyweather.favoritescreen.viewmodel.FavoriteViewModelFactory
-import com.example.safyweather.location.InitialFragmentDirections
 import com.example.safyweather.model.Repository
+import com.example.safyweather.model.RepositoryInterface
 import com.example.safyweather.model.WeatherAddress
 import com.example.safyweather.networking.RemoteSource
 
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -40,6 +41,7 @@ class MapsFragment : Fragment() {
     private lateinit var favViewModelFactory:FavoriteViewModelFactory
     private lateinit var favViewModel:FavoriteViewModel
     private val fragmentType:MapsFragmentArgs by navArgs()
+    private var settings: com.example.safyweather.model.Settings? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -64,20 +66,33 @@ class MapsFragment : Fragment() {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(someLocation,8f))
 
             val dialogBuilder = AlertDialog.Builder(requireContext())
-            dialogBuilder.setMessage("Are you sure to save this location ?")
+            dialogBuilder.setMessage(getString(R.string.saveLocation))
                 .setCancelable(false)
-                .setPositiveButton("save") { dialog, id ->
+                .setPositiveButton(getString(R.string.save)) { dialog, id ->
                     when(fragmentType.commingFragment) {
                         false -> {
-                            val latIn4Digits: Double = String.format("%.4f", it.latitude).toDouble()
-                            val lonIn4Digits: Double = String.format("%.4f", it.longitude).toDouble()
+                            val latIn4Digits: Double
+                            val lonIn4Digits: Double
+                            if(settings?.language as Boolean) {
+                                latIn4Digits=
+                                    String.format("%.4f", it.latitude).toDouble()
+                                lonIn4Digits=
+                                    String.format("%.4f", it.longitude).toDouble()
+                            }
+                            else{
+                                latIn4Digits = it.latitude
+                                lonIn4Digits = it.longitude
+                            }
                             var selectedAddress = WeatherAddress(addressName, latIn4Digits, lonIn4Digits)
                             this.addWeatherWithAddress(selectedAddress)
-                            //val action = MapsFragmentDirections.actionMapsFragmentToFavoriteFragment( it.latitude.toFloat(),it.longitude.toFloat(),addressName)
+                            //val action = MapsFragmentDirections.actionMapsFragmentToFavoriteFragment(it.latitude.toFloat(),it.longitude.toFloat(),addressName)
                             navController.navigateUp()
                         }
                         true -> {
-                            val action = MapsFragmentDirections.actionMapsFragmentToHomeFragment(it.latitude.toFloat(),it.longitude.toFloat(),"metric")
+                            settings?.location = 2
+                            favViewModel.setSettingsSharedPrefs(settings as com.example.safyweather.model.Settings)
+                            val action = MapsFragmentDirections.actionMapsFragmentToHomeFragment(it.latitude.toFloat(),it.longitude.toFloat(),
+                                arrayOfUnits[settings?.unit as Int],true)
                             navController.navigate(action)
                         }
                         null -> {
@@ -85,7 +100,7 @@ class MapsFragment : Fragment() {
                     }
                     dialog.cancel()
                 }
-                .setNegativeButton("Cancel") { dialog, id -> dialog.cancel() }
+                .setNegativeButton(getString(R.string.cancel)) {dialog, id -> dialog.cancel()}
             val alert = dialogBuilder.create()
             alert.show()
         }
@@ -99,7 +114,9 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        navController = Navigation.findNavController(activity as AppCompatActivity,R.id.nav_host_fragment)
+        navController = Navigation.findNavController(activity as AppCompatActivity,
+            R.id.nav_host_fragment
+        )
 
         favViewModelFactory = FavoriteViewModelFactory(
             Repository.getInstance(
@@ -108,6 +125,8 @@ class MapsFragment : Fragment() {
             requireContext(),
             requireContext().getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)))
         favViewModel = ViewModelProvider(this,favViewModelFactory).get(FavoriteViewModel::class.java)
+
+        settings = favViewModel.getStoredSettings()
 
         mapFragment?.getMapAsync(callback)
 

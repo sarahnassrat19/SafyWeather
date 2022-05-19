@@ -72,7 +72,8 @@ data class WeatherAddress(var address:String,
 
 @Entity(tableName = "alerts")
 data class AlertData(var fromDate:Date,
-                     var toDate:Date){
+                     var toDate:Date,
+                     var notifyType:Boolean = true){
     @PrimaryKey(autoGenerate = true)
     var pKey:Int = 0
 }
