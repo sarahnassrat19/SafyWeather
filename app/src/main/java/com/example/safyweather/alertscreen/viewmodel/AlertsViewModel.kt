@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.safyweather.model.AlertData
 import com.example.safyweather.model.RepositoryInterface
+import com.example.safyweather.model.Settings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AlertsViewModel(private val repo: RepositoryInterface): ViewModel() {
 
+    //alerts
     fun getAllAlertsInVM():LiveData<List<AlertData>>{
         return repo.getAllAlertsInRepo()
     }
@@ -24,6 +26,15 @@ class AlertsViewModel(private val repo: RepositoryInterface): ViewModel() {
         viewModelScope.launch(Dispatchers.IO){
             repo.deleteAlertInRepo(alert)
         }
+    }
+
+    //settings
+    fun setSettingsSharedPrefs(settings: Settings){
+        repo.addSettingsToSharedPreferences(settings)
+    }
+
+    fun getStoredSettings(): Settings? {
+        return repo.getSettingsSharedPreferences()
     }
 
 }

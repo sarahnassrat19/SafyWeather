@@ -48,8 +48,10 @@
     <string name="pressure">الضغط</string>
     <string name="wind_speed">سرعة الرياح</string>
     <string name="clouds">السحب</string>
-    <string name="from">from</string>
-    <string name="to">to</string>
+    <string name="from">من</string>
+    <string name="to">الى</string>
+    <string name="warning">عندما تبطل الاشعارات لا يمكنك استلام التنبيهات بخصوص الطقس!</string>
+    <string name="sorry">نأسف لا يمكنك حفظ هذا التنبيه! يجب عليك تفعيل الاشعارات</string>
 
 
 </resources>

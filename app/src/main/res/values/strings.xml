@@ -48,5 +48,7 @@
     <string name="clouds">Clouds</string>
     <string name="from">from</string>
     <string name="to">to</string>
+    <string name="warning">when you disable the notifications you cannot receive alerts about the weather!</string>
+    <string name="sorry">Sorry cannot save this alarm! you should enable the notifications</string>
 
 </resources>

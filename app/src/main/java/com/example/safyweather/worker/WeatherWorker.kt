@@ -10,21 +10,36 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.safyweather.NOTIFICATION_CHANNEL
-import com.example.safyweather.NOTIFICATION_ID
-import com.example.safyweather.NOTIFICATION_NAME
-import com.example.safyweather.R
 import com.example.safyweather.alertscreen.view.AlertsFragment
 import com.example.safyweather.utilities.vectorToBitmap
 import android.media.RingtoneManager
 import android.net.Uri
+import com.example.safyweather.*
+import com.example.safyweather.db.LocalSource
+import com.example.safyweather.model.Repository
+import com.example.safyweather.model.RepositoryInterface
+import com.example.safyweather.model.Settings
+import com.example.safyweather.networking.RemoteSource
 
 
 class WeatherWorker(var context: Context, var params: WorkerParameters):Worker(context,params) {
 
+    private var settings: Settings? = null
+    private lateinit var repo: RepositoryInterface
+
     override fun doWork(): Result {
-        val id = inputData.getLong(NOTIFICATION_ID, 0).toInt()
-        sendNotification(id)
+        repo = Repository.getInstance(
+            RemoteSource.getInstance(),
+            LocalSource.getInstance(context),
+            context,
+            context.getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE))
+        settings = repo.getSettingsSharedPreferences()
+
+        if(settings?.notification as Boolean) {
+            val id = inputData.getLong(NOTIFICATION_ID, 0).toInt()
+            sendNotification(id)
+        }
+
         return Result.success()
     }
 

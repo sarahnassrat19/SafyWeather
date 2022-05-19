@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -65,6 +66,15 @@ class SettingsFragment : Fragment() {
         binding.notiDisable.setOnClickListener{
             settings?.notification = false
             settingsViewModel.setSettingsSharedPrefs(settings as Settings)
+
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(getString(R.string.warning))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok)) { dialog, id ->
+                    dialog.cancel()
+                }
+            val alert = dialogBuilder.create()
+            alert.show()
         }
 
         binding.GPS.setOnClickListener{
