@@ -6,6 +6,7 @@
  <p>&emsp;• you can add any region using Maps to your Favorite List </p>
  <p>&emsp;• also you can set Alerts about the weather of your current location and you can choose notifications or Alarm for that Alert</p>
  <p>&emsp;•provided with App Settings so you can use any language.</p>
+ <img src="https://user-images.githubusercontent.com/56044499/169477471-6755e52a-4689-4428-871e-6a115dd9810f.jpg">
 ![IMG_20220519_161309](https://user-images.githubusercontent.com/56044499/169477471-6755e52a-4689-4428-871e-6a115dd9810f.jpg)
 ![IMG_20220519_161411](https://user-images.githubusercontent.com/56044499/169477490-746177ae-b4d7-48cb-9cc6-30ee1e5f6507.jpg)
 ![IMG_20220519_161426](https://user-images.githubusercontent.com/56044499/169477557-6af27d09-f1a5-4479-8ce1-7ca0c104eef6.jpg)
