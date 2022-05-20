@@ -12,4 +12,3 @@
 ![IMG_20220519_161350](https://user-images.githubusercontent.com/56044499/169475514-ff51813f-15f4-4147-a0cc-08877276e71f.jpg)
 ![IMG_20220519_161519](https://user-images.githubusercontent.com/56044499/169475556-69163997-acfe-488a-b64b-57479894a775.jpg)
 ![IMG_20220519_161322](https://user-images.githubusercontent.com/56044499/169475577-22a7784a-9db7-4a14-bc9d-5806e0f29742.jpg)
-![IMG_20220519_161322](https://user-images.githubusercontent.com/56044499/169475685-7b2451f6-dfef-4a00-902a-81f21f1ba826.jpg)
